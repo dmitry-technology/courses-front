@@ -1,0 +1,15 @@
+// npx create-react-app life-game --template typescript
+npm run start
+clear app.tsx
+create:
+- components, //view
+- configuration, 
+- service   // algoritm life-game 
+- util  //get rnd matrix
+test:  js matchers jestjs
+
+mui: npm install @mui/material @emotion/react @emotion/styled
+npm install @fontsource/roboto
+npm i react-router-dom
+
+1. pages
