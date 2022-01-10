@@ -1,7 +1,10 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { FC, ReactNode } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import NavigatorMobile from './components/common/navigator-mobile';
+import NavigatorDrawer from './components/common/navigator-mobile';
+import NavigatorResposive from './components/common/navigator-resposive';
+// import NavigatorDrawer from './components/common/navigator-mobile';
+// import NavigatorMobile from './components/common/navigator-mobile';
 import NavigatorWeb from './components/common/navigator-web';
 import { PATH_ADD_COURSE, PATH_COURSES, PATH_LOGIN, PATH_LOGOUT, PATH_STATISTICS_COST, PATH_STATISTICS_HOURS, routes } from './config/routes-config';
 
@@ -22,7 +25,8 @@ const App: FC = () => {
   return <ThemeProvider theme={theme}> 
   <BrowserRouter>
     {/* <NavigatorWeb items={routes} /> */}
-    <NavigatorMobile items={routes} />
+    {/* <NavigatorDrawer items={routes} /> */}
+    <NavigatorResposive items={routes} />
     <Routes>{getRoutes()}
     <Route path='/' element={<Navigate to={PATH_COURSES}/>} />
     </Routes>

@@ -9,7 +9,7 @@ const NavigatorWeb:FC<{items: RouteType[]}> = (props) => {
 
     const [activeTabIndex, setActiveTab] = useState(getInitialActiveTabIndex(location.pathname, props.items));
     function getTabs():ReactNode[]{
-        return props.items.map(item => <Tab key={item.label} component={Link} to={item.path} label= {item.label}/>)
+        return props.items.map(item => <Tab sx={{backgroundColor: 'black' , color: 'white'}} key={item.label} component={Link} to={item.path} label= {item.label}/>)
     }
     function onChangeHandler(event:any, newValue: number){
         setActiveTab(newValue);
