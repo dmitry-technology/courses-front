@@ -1,1 +1,4 @@
 //npm install @mui/icons-material
+// npx create-react-app life-game --template typescript
+//npm install react-transition-group --save
+npm install react-responsive --save	// для условного рендеринга в зависимости от размера экрана

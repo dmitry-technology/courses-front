@@ -1,8 +1,11 @@
 import { Typography } from "@mui/material";
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
+import CoursesContext from "../../store/context";
 
 export const StatisticsCost: FC = () => {
-    return <Typography variant="body1" component="h2">
-    Statistics cost
-  </Typography>;
+  const storeValue = useContext(CoursesContext);
+    return <Typography variant="h3">
+    Cost statisitcs works:
+     number of digitl in counter is {storeValue.count}
+  </Typography>
 }
