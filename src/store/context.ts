@@ -1,17 +1,11 @@
-// import { StoreType } from "../models/store-type";
 import { createContext } from "react";
 import { CourseType } from "../models/course-type";
-// import { getRandomDate } from "../util/random";
+import { StoreType } from "../models/store-type";
 
-export type CourseOpp = {
-    courses : CourseType[];
-    addFn : (course:CourseType) => void;
-    removeFn : (id:number) => void;
-}
-export const defaultValue: CourseOpp = {
+export const defaultValue: StoreType = {
     courses: [],
     addFn : (course:CourseType) => {},
     removeFn : (id:number) => {} 
 }
-const CoursesContext = createContext<CourseOpp>(defaultValue);
+const CoursesContext = createContext<StoreType>(defaultValue);
 export default CoursesContext;

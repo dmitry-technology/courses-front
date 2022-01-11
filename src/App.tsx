@@ -4,10 +4,11 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
 
 import { PATH_ADD_COURSE, PATH_COURSES, PATH_LOGIN, PATH_LOGOUT, PATH_STATISTICS_COST, PATH_STATISTICS_HOURS, routes } from './config/routes-config';
-import CoursesContext, { CourseOpp, defaultValue } from './store/context';
+import CoursesContext, { defaultValue } from './store/context';
 import { createRandomCourse } from './util/random';
 import { CourseType } from './models/course-type';
 import _ from 'lodash';
+import { StoreType } from './models/store-type';
 
 const N_RANDOM_COURSES = 10;
 
@@ -34,7 +35,7 @@ createRandomCourses();
 //   }
 // }
 const App: FC = () => {
-  const [coursesState, setcoursesState] = useState<CourseOpp>({...defaultValue, courses: courses});
+  const [coursesState, setcoursesState] = useState<StoreType>({...defaultValue, courses: courses});
 
   // setcoursesState({courses: courses});
   coursesState.addFn = addCourse;

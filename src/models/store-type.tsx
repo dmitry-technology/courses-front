@@ -1,5 +1,7 @@
+import { CourseType } from "./course-type";
+
 export type StoreType = {
-    count: number;
-    increase?: ()=>void;
-    decrease?: ()=>void;
+    courses : CourseType[];
+    addFn : (course:CourseType) => void;
+    removeFn : (id:number) => void;
 }
