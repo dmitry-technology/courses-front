@@ -4,18 +4,6 @@ import React, { FC, useContext } from "react";
 import { CourseType } from "../../models/course-type";
 import CoursesContext from "../../store/context";
 
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
 const intervalDivider: number[] = [
   1000, 2000, 3000, 5000, 10000
 ];
@@ -46,13 +34,10 @@ export const StatisticsCost: FC = () => {
         <ListItemText>min={element.minInterval}   max={element.maxInterval} amount={element.amount} </ListItemText>
       </ListItem>
     })
-
-
   }
 
   const handleChange = (event: any) => {
     setInterval(event.target.value);
-
   };
 
   return <div>
@@ -68,7 +53,6 @@ export const StatisticsCost: FC = () => {
         value={intervalDivider}
         onChange={handleChange}
         input={<OutlinedInput label="Name" />}
-        MenuProps={MenuProps}
       >
         {intervalDivider.map((element) => (
           <MenuItem

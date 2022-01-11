@@ -11,12 +11,11 @@ const NavigatorWeb:FC<{items: RouteType[]}> = (props) => {
     function getTabs():ReactNode[]{
         return props.items.map(item => <Tab sx={{backgroundColor: 'black' , color: 'white'}} key={item.label} component={Link} to={item.path} label= {item.label}/>)
     }
-    function onChangeHandler(event:any, newValue: number){
-        setActiveTab(newValue);
+    function onChangeHandler(event:any){
+        setActiveTab(event.target.value);
     }
     return (
-        <Tabs value={activeTabIndex} onChange={onChangeHandler} variant="fullWidth"
-        >
+        <Tabs value={activeTabIndex} onChange={onChangeHandler} variant="fullWidth">
             {getTabs()}
         </Tabs>
     )
