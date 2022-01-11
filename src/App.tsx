@@ -2,7 +2,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FC, ReactNode, useContext, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
-
 import { PATH_ADD_COURSE, PATH_COURSES, PATH_LOGIN, PATH_LOGOUT, PATH_STATISTICS_COST, PATH_STATISTICS_HOURS, routes } from './config/routes-config';
 import CoursesContext, { defaultValue } from './store/context';
 import { createRandomCourse } from './util/random';
@@ -20,20 +19,9 @@ function createRandomCourses() {
       }
 }
 
-
-
-
 const theme = createTheme();
 createRandomCourses();
-// theme.typography.body1 = {
-//   fontSize: '1.2rem',
-//   '@media (min-width:568px)': {
-//     fontSize: '2rem'
-//   },
-//   [theme.breakpoints.up('md')]: {
-//     fontSize: '3rem'
-//   }
-// }
+
 const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>({courses: courses});
   coursesState.addFn = addCourse;
