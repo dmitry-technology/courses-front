@@ -26,14 +26,12 @@ const App: FC = () => {
     return routes.map((e) => <Route key={e.path} path={e.path} element={e.element} />);
   }
   return <CoursesContext.Provider value={coursesState}>
-    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <NavigatorResposive items={routes} />
         <Routes>{getRoutes()}
           <Route path='/' element={<Navigate to={PATH_COURSES} />} />
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
   </CoursesContext.Provider>
 }
 
