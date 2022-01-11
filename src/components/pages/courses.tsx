@@ -1,6 +1,7 @@
 import { Typography, Box, Button, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import React, { FC, useContext } from "react";
 import CoursesContext from "../../store/context";
+import {Delete} from "@mui/icons-material"
 
 
 export const Courses: FC = () => {
@@ -11,9 +12,9 @@ export const Courses: FC = () => {
     <List>
     {storeValue.courses.map((element)=> {
        return   <ListItem>
-         <ListItemButton onClick={() => (storeValue.removeFn && storeValue.removeFn(element.id))}>
+              <ListItemButton onClick={() => (storeValue.removeFn && storeValue.removeFn(element.id))}><Delete/> </ListItemButton>
               <ListItemText primary={JSON.stringify(element)}/>
-            </ListItemButton>
+           
         </ListItem>
     })}
     </List>

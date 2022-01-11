@@ -10,7 +10,7 @@ export const AddCourse: FC = () => {
       <Typography variant="h3">
         Add Course
       </Typography>
-      <Button  onClick={()=>(storeValue.addFn && storeValue.addFn(createRandomCourse()))}>Add course</Button>
+      <Button  onClick={()=>(storeValue.addFn!(createRandomCourse()))}>Add course</Button>
     </Box>
 
 }

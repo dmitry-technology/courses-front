@@ -3,6 +3,8 @@ import _ from "lodash";
 import React, { FC, useContext } from "react";
 import { CourseType } from "../../models/course";
 import CoursesContext from "../../store/context";
+import { getStatistics } from "../../util/courses-utils";
+
 
 const intervalDivider: number[] = [
   1000, 2000, 3000, 5000, 10000
@@ -14,18 +16,9 @@ export const StatisticsCost: FC = () => {
   const [interval=10, setInterval] = React.useState<number>(0);
 
   function getListElements() {
-    let arr: CourseType[] = storeValue.courses;
-    let objCnt = _.countBy(arr, e => {
-      return Math.floor(e.cost / interval) * interval;
-    });
 
-    let res = Object.entries(objCnt).map(([key, value]) => {
-      let minInterval = key;
-      let maxInterval = +key + +key - 1;
-      let amount = value;
-      return { minInterval: minInterval, maxInterval: maxInterval, amount: amount}
-    });
-    
+    let res = getStatistics(storeValue.courses, interval, true);
+   
     if(!!res[0].maxInterval == false){
       return <ListItem></ListItem>
     }
