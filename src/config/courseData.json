@@ -1,0 +1,44 @@
+{
+    "minId": 300000,
+    "maxId": 999999,
+    "minCost": 5000,
+    "maxCost": 20000,
+    "minHours": 80,
+    "maxHours": 800,
+    "minYear": 2015,
+    "maxYear": 2021,
+    "courseName": [
+        "Java Core",
+        "JS",
+        "HTML",
+        "QA manual",
+        "QA automation",
+        "Java Technologies",
+        "CSS",
+        "React"
+    ],
+    "lecturers": [
+        "Abraham",
+        "Yackob",
+        "Yosef",
+        "Moses",
+        "Ahser",
+        "Naftaly"
+    ],
+    "types": [
+        "Programming",
+        "QA"
+    ],
+    "timing": [
+        "day",
+        "evening"
+    ],
+    "hoursDivider": [
+        10, 20, 30, 50, 100
+    ],
+    "costDivider": [
+        1000, 2000, 3000, 5000, 10000
+    ],
+    "pollerInterval": 2000
+
+}

@@ -15,7 +15,8 @@ const NavigatorWeb:FC<{items: RouteType[]}> = (props) => {
         setActiveTab(newValue);
     }
     return (
-        <Tabs value={activeTabIndex} onChange={onChangeHandler}>
+        <Tabs value={activeTabIndex} onChange={onChangeHandler} variant="fullWidth"
+        >
             {getTabs()}
         </Tabs>
     )

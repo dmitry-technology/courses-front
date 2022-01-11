@@ -4,10 +4,26 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
 
 import { PATH_ADD_COURSE, PATH_COURSES, PATH_LOGIN, PATH_LOGOUT, PATH_STATISTICS_COST, PATH_STATISTICS_HOURS, routes } from './config/routes-config';
-import { StoreType } from './models/store-type';
-import CoursesContext, { defaultValue } from './store/context';
+import CoursesContext, { CourseOpp, defaultValue } from './store/context';
+import { createRandomCourse } from './util/random';
+import { CourseType } from './models/course-type';
+import _ from 'lodash';
+
+const N_RANDOM_COURSES = 10;
+
+let courses: CourseType[] = [];
+
+function createRandomCourses() {
+      for (let i = 0; i < N_RANDOM_COURSES; i++) {
+        courses.push(createRandomCourse());
+      }
+}
+
+
+
 
 const theme = createTheme();
+createRandomCourses();
 // theme.typography.body1 = {
 //   fontSize: '1.2rem',
 //   '@media (min-width:568px)': {
@@ -18,22 +34,23 @@ const theme = createTheme();
 //   }
 // }
 const App: FC = () => {
-  
-  const [storeValueState, setstoreValueState] = useState<StoreType>(defaultValue);
-  storeValueState.increase = increseCount;
-  storeValueState.decrease = decreseCount;
-  function increseCount(){
-    storeValueState.count++;
-    setstoreValueState({...storeValueState});
+  const [coursesState, setcoursesState] = useState<CourseOpp>({...defaultValue, courses: courses});
+
+  // setcoursesState({courses: courses});
+  coursesState.addFn = addCourse;
+  coursesState.removeFn = removeCourse;
+  function addCourse(course:CourseType){
+    coursesState.courses.push(course);
+    setcoursesState({...coursesState})
   }
-  function decreseCount(){
-    storeValueState.count--;
-    setstoreValueState({...storeValueState});
+  function removeCourse(id:number){
+    _.remove(coursesState.courses, (e) => e.id == id);
+    setcoursesState({...coursesState});
   }
   function getRoutes(): ReactNode[] {
     return routes.map((e) => <Route key={e.path} path={e.path} element={e.element} />);
   }
-  return <CoursesContext.Provider value={storeValueState}>
+  return <CoursesContext.Provider value={coursesState}>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <NavigatorResposive items={routes} />
