@@ -11,7 +11,7 @@ export const Courses: FC = () => {
     <List>
     {storeValue.courses.map((element)=> {
        return   <ListItem>
-         <ListItemButton onClick={() => storeValue.removeFn(element.id)}>
+         <ListItemButton onClick={() => (storeValue.removeFn && storeValue.removeFn(element.id))}>
               <ListItemText primary={JSON.stringify(element)}/>
             </ListItemButton>
         </ListItem>

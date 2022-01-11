@@ -36,8 +36,6 @@ createRandomCourses();
 // }
 const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>({...defaultValue, courses: courses});
-
-  // setcoursesState({courses: courses});
   coursesState.addFn = addCourse;
   coursesState.removeFn = removeCourse;
   function addCourse(course:CourseType){
