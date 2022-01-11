@@ -1,4 +1,4 @@
-import { CourseType } from "./course-type";
+import { CourseType } from "./course";
 
 export type StoreType = {
     courses : CourseType[];

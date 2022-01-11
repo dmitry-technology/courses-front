@@ -1,9 +1,13 @@
 import { createContext } from "react";
-import { CourseType } from "../models/course-type";
-import { StoreType } from "../models/store-type";
+import { StoreType } from "../models/course-store-type";
+import {createRandomCourses } from "../util/random-courses";
+const N_RANDOM_COURSES = 10;
 
-export const defaultValue: StoreType = {
-    courses: []
+export const initialCourses: StoreType = {
+    courses: createRandomCourses(N_RANDOM_COURSES)
 }
-const CoursesContext = createContext<StoreType>(defaultValue);
+const CoursesContext = createContext<StoreType>(initialCourses);
+
+
+
 export default CoursesContext;

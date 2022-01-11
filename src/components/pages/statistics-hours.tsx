@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import _ from "lodash";
 import React, { FC, useContext } from "react";
-import { CourseType } from "../../models/course-type";
+import { CourseType } from "../../models/course";
 import CoursesContext from "../../store/context";
 
 

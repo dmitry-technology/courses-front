@@ -15,7 +15,7 @@ const NavigatorWeb:FC<{items: RouteType[]}> = (props) => {
         setActiveTab(event.target.value);
     }
     return (
-        <Tabs value={activeTabIndex} onChange={onChangeHandler} variant="fullWidth">
+        <Tabs TabIndicatorProps={{style:{backgroundColor:'blue'}}} value={activeTabIndex} onChange={onChangeHandler} variant="fullWidth">
             {getTabs()}
         </Tabs>
     )

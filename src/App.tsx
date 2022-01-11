@@ -1,29 +1,17 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FC, ReactNode, useContext, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
-import { PATH_ADD_COURSE, PATH_COURSES, PATH_LOGIN, PATH_LOGOUT, PATH_STATISTICS_COST, PATH_STATISTICS_HOURS, routes } from './config/routes-config';
-import CoursesContext, { defaultValue } from './store/context';
-import { createRandomCourse } from './util/random';
-import { CourseType } from './models/course-type';
+import {PATH_COURSES, routes } from './config/routes-config';
+import CoursesContext, { initialCourses } from './store/context';
+import { CourseType } from './models/course';
+import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
-import { StoreType } from './models/store-type';
-
-const N_RANDOM_COURSES = 10;
-
-let courses: CourseType[] = [];
-
-function createRandomCourses() {
-      for (let i = 0; i < N_RANDOM_COURSES; i++) {
-        courses.push(createRandomCourse());
-      }
-}
 
 const theme = createTheme();
-createRandomCourses();
 
 const App: FC = () => {
-  const [coursesState, setcoursesState] = useState<StoreType>({courses: courses});
+  const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
   coursesState.addFn = addCourse;
   coursesState.removeFn = removeCourse;
   function addCourse(course:CourseType){
