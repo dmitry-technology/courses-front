@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
 import {PATH_COURSES, routes } from './config/routes-config';
 import CoursesContext, { initialCourses } from './store/context';
-import { CourseType } from './models/course';
+import { Course } from './models/course';
 import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
 
@@ -14,7 +14,7 @@ const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
   coursesState.addFn = addCourse;
   coursesState.removeFn = removeCourse;
-  function addCourse(course:CourseType){
+  function addCourse(course:Course){
     coursesState.courses.push(course);
     setcoursesState({...coursesState})
   }

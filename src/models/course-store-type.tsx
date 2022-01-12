@@ -1,7 +1,7 @@
-import { CourseType } from "./course";
+import { Course } from "./course";
 
 export type StoreType = {
-    courses : CourseType[];
-    addFn ?: (course:CourseType) => void;
+    courses : Course[];
+    addFn ?: (course:Course) => void;
     removeFn ?: (id:number) => void;
 }

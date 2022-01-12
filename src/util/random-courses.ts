@@ -1,4 +1,4 @@
-import { CourseType, createCourse } from "../models/course";
+import { Course, createCourse } from "../models/course";
 import courseData from "../config/courseData.json";
 import { getRandomDate, getRandomElement, getRandomInteger } from "./common/random";
 
@@ -6,14 +6,14 @@ import { getRandomDate, getRandomElement, getRandomInteger } from "./common/rand
 
 
 export function createRandomCourses(amount:number) {
-    let courses: CourseType[] = [];
+    let courses: Course[] = [];
       for (let i = 0; i < amount; i++) {
         courses.push(createRandomCourse());
       }
       return courses;
 }
 
-export function createRandomCourse(): CourseType {
+export function createRandomCourse(): Course {
     const { minCost, maxCost, minHours, maxHours, minYear, maxYear, courseName, lecturers, types, timing } = { ...courseData };
 
    const id = getRandomInteger(0, Date.now()) ;
@@ -25,6 +25,6 @@ export function createRandomCourse(): CourseType {
    const dayEveningId = getRandomInteger(0, 2);
    const dayEvening = dayEveningId < 2 ? [timing[dayEveningId]] : timing;
    const startDate = getRandomDate(minYear, maxYear);
-   const course:CourseType = createCourse(id, name, lecture, hours, cost, type, dayEvening, startDate);
+   const course:Course = createCourse(id, name, lecture, hours, cost, type, dayEvening, startDate);
    return course;
  }

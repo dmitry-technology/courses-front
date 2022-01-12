@@ -1,4 +1,4 @@
-export type CourseType = {
+export type Course = {
     id:number;
     courseName:string;
     lecturerName:string; 
@@ -9,7 +9,7 @@ export type CourseType = {
     openDate:Date;
 }
 
-export function createCourse(id:number, courseName:string, lecturerName:string, hours:number, cost:number, type:string, dayEvening:string[], openDate:Date): CourseType {
+export function createCourse(id:number, courseName:string, lecturerName:string, hours:number, cost:number, type:string, dayEvening:string[], openDate:Date): Course {
     return {
         id, courseName, lecturerName, hours, cost, type, dayEvening, openDate
     };
