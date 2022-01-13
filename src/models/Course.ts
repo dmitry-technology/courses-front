@@ -1,4 +1,4 @@
-export type Course = {
+type Course = {
     id:number;
     courseName:string;
     lecturerName:string; 
@@ -14,3 +14,5 @@ export function createCourse(id:number, courseName:string, lecturerName:string, 
         id, courseName, lecturerName, hours, cost, type, dayEvening, openDate
     };
 }
+
+export default Course;

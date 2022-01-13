@@ -1,5 +1,7 @@
-import { Course } from "../models/course";
+import Course from "../models/course";
 import CoursesService from "./courses-service";
+import {Observable, from} from 'rxjs'
+
 
 export default class CoursesServiceRest implements CoursesService {
     constructor(private url: string) { }
@@ -19,11 +21,12 @@ export default class CoursesServiceRest implements CoursesService {
         }
     }
     async remove(id: number): Promise<Course> {
-        const response = await fetch(`${this.url}/${encodeURIComponent(id)}`,
+        const oldCourse = await this.get(id);
+        await fetch(this.getUrlId(id),
             {
                 method: "DELETE"
             });
-        return await response.json();
+        return oldCourse as Course;
     }
     async exists(id: number): Promise<boolean> {
         try {
@@ -33,8 +36,9 @@ export default class CoursesServiceRest implements CoursesService {
             throw "server is not available";
         }
     }
-    get(id?: number): Promise<Course[]> | Promise<Course> {
-        return id == undefined ? (this.fetchGet(this.url) as Promise<Course[]>) :
+    //TODO FIXME
+    get(id?: number): Observable<Course[]> | Promise<Course> {
+        return id == undefined ? from(this.fetchGet(this.url)) as Observable<Course[]> :
             this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
     }
     private async fetchGet(url: string): Promise<any> {
@@ -42,9 +46,10 @@ export default class CoursesServiceRest implements CoursesService {
         return await r.json();
     }
     private getUrlId(id: number) {
-        return `${this.url}/${encodeURIComponent(id)}`;
+        return `${this.url}/${id}`;
     }
     async update(id: number, newCourse: Course): Promise<Course> {
+        const oldCourse = await this.get(id);
         const response = await fetch(this.getUrlId(id), {
             method: "PUT",
             headers: {
@@ -52,7 +57,7 @@ export default class CoursesServiceRest implements CoursesService {
             },
             body: JSON.stringify(newCourse)
         });
-        return await response.json();
+        return oldCourse as Course;
     }
 
 }

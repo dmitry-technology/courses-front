@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Course } from "../models/course";
+import Course from "../models/course";
 
     
     

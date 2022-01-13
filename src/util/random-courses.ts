@@ -1,4 +1,4 @@
-import { Course, createCourse } from "../models/course";
+import  Course, { createCourse } from "../models/course";
 import courseData from "../config/courseData.json";
 import { getRandomDate, getRandomElement, getRandomInteger } from "./common/random";
 

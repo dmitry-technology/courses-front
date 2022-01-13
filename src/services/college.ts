@@ -1,27 +1,27 @@
-import { Course } from "../models/course";
 import CoursesService from "./courses-service";
+import {Observable, from} from 'rxjs'
+import Course from "../models/course";
+
 
 export default class College {
     constructor(private coursesSerivece: CoursesService) { }
-    async addCourse(course: Course): Promise<Course> {
-        return await this.coursesSerivece.add(course);
+    addCourse(course: Course): Promise<Course> {
+        return this.coursesSerivece.add(course);
     }
-    async removeCourse(id: number): Promise<Course> {
-        return await this.coursesSerivece.remove(id);
+    removeCourse(id: number): Promise<Course> {
+        return this.coursesSerivece.remove(id);
     }
-    async getCourse(id: number): Promise<Course> {
-        return await this.coursesSerivece.get(id) as Course;
+    getCourse(id: number): Promise<Course> {
+        return this.coursesSerivece.get(id) as Promise<Course>;
     }
-    async updateCourse(id: number, course: Course): Promise<Course> {
-        const res = this.coursesSerivece.get(id) as Promise<Course>;
-        this.coursesSerivece.update(id, course);
-        return res;
+    updateCourse(id: number, course: Course): Promise<Course> {
+        return this.coursesSerivece.update(id, course);
     }
-    async exists(id: number): Promise<boolean> {
+    exists(id: number): Promise<boolean> {
         return this.coursesSerivece.exists(id);
     }
-    async getAllCourses(): Promise<Course[]> {
-        return await this.coursesSerivece.get() as Course[];
+    getAllCourses(): Observable<Course[]> {
+        return this.coursesSerivece.get() as Observable<Course[]>;
     }
 
 }

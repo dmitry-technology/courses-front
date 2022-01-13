@@ -3,13 +3,10 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
 import { PATH_COURSES, routes } from './config/routes-config';
 import CoursesContext, { initialCourses } from './store/context';
-import { Course } from './models/course';
 import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
-import { courseProvider } from './config/servicesConfig';
-import College from './services/college';
-// import colledge from './services/colledge';
-const college: College = new College(courseProvider)
+import { college } from './config/servicesConfig'
+import Course from './models/course';
 const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
 
@@ -17,7 +14,7 @@ const App: FC = () => {
     coursesState.addFn = addCourse;
     coursesState.removeFn = removeCourse;
     poller();
-    const interval = setInterval(poller, 500);
+    const interval = setInterval(poller, 2000);
     return () => {
       clearInterval(interval);
     }
@@ -32,10 +29,15 @@ const App: FC = () => {
     poller();
   }
 
-  async function poller() {
-    const courses = await college.getAllCourses();
-    coursesState.courses = courses;
-    setcoursesState({ ...coursesState });
+  function poller() {
+    college.getAllCourses().subscribe({
+      next(arr: any){
+        coursesState.courses = arr;
+        setcoursesState({ ...coursesState });
+      }
+    });
+    
+   
   }
 
   function getRoutes(): ReactNode[] {
