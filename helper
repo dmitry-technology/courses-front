@@ -13,5 +13,8 @@ npm install @fontsource/roboto
 npm i react-router-dom
 npm i lodash @types/lodash
 //import { createTheme } from '@mui/material/styles';
+npm i -g json-server
+json-server -p3500 --watch data.json
+http://localhost:3500/courses/123
 
 1. pages

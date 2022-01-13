@@ -1,7 +1,7 @@
 import { Course } from "../models/course";
 import CoursesService from "./courses-service";
 
-export default class Colledge {
+export default class College {
     constructor(private coursesSerivece: CoursesService) { }
     async addCourse(course: Course): Promise<Course> {
         return await this.coursesSerivece.add(course);
