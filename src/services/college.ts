@@ -1,5 +1,5 @@
 import CoursesService from "./courses-service";
-import {Observable, from} from 'rxjs'
+import {Observable} from 'rxjs'
 import Course from "../models/course";
 
 

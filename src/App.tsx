@@ -13,11 +13,7 @@ const App: FC = () => {
   useEffect(() => {
     coursesState.addFn = addCourse;
     coursesState.removeFn = removeCourse;
-    poller();
-    // const interval = setInterval(poller, 2000);
-    // return () => {
-    //   clearInterval(interval);
-    // }
+    pop();
   }
   );
 
@@ -26,12 +22,11 @@ const App: FC = () => {
   }
   function removeCourse(id: number) {
     college.removeCourse(id);
-    poller();
   }
 
-  function poller() {
+  function pop() {
     college.getAllCourses().subscribe({
-      next(arr: Course[]){
+      next(arr: Course[]) {
         coursesState.courses = arr;
         setcoursesState({ ...coursesState });
       },
@@ -39,8 +34,6 @@ const App: FC = () => {
         console.log(err);
       }
     });
-    
-   
   }
 
   function getRoutes(): ReactNode[] {

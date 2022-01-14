@@ -37,36 +37,38 @@ export default class CoursesServiceRest implements CoursesService {
             throw "server is not available";
         }
     }
-    //TODO FIXME
-     get(id?: number): Observable<Course[]> | Promise<Course> {
+
+    get(id?: number): Observable<Course[]> | Promise<Course> {
          if(id == undefined){
-        const observable = new Observable<Course[]>((subscriber) => {
-            const interval = setInterval(async () => {
-                try {
-                    subscriber.next([]);
-                    // const response = await this.fetchGet(this.url);
-                    // if(this.currentResponse !== JSON.stringify(response)){
-                    //     this.currentResponse = response;
-                    //     subscriber.next(response);
-                    // }
-                } catch (err) {
-                    subscriber.error(err)
-                    clearInterval(interval);
-                }
-            }, 1000);
-            return clearInterval(interval);
-        })
-        return observable;
-    }
+                return new Observable<Course[]>(subscriber => {
+                    const interval = setInterval(async ()=> {
+                        try {
+                            const courses: Course[] = await this.fetchGet(this.url);
+                                const getResponce: string = JSON.stringify(courses);
+                                if(this.currentResponse !== getResponce){
+                                    this.currentResponse = getResponce;
+                                    subscriber.next(courses);
+                                }
+                        } catch (err) {
+                            subscriber.error(err);
+                            clearInterval(interval);
+                        } 
+                    }, 2000);
+                    return () => clearInterval(interval);
+                })         
+         }
         return this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
     }
+
     private async fetchGet(url: string): Promise<any> {
         const r = await fetch(url);
         return await r.json();
     }
+
     private getUrlId(id: number) {
         return `${this.url}/${id}`;
     }
+
     async update(id: number, newCourse: Course): Promise<Course> {
         const oldCourse = await this.get(id);
         const response = await fetch(this.getUrlId(id), {

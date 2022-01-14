@@ -1,113 +1,53 @@
 {
   "courses": [
     {
-      "id": 483389752222,
-      "courseName": "CSS",
+      "id": 57646846145,
+      "courseName": "QA automation",
       "lecturerName": "Moses",
-      "hours": 497,
-      "cost": 19555,
-      "type": "QA",
-      "dayEvening": [
-        "day"
-      ],
-      "openDate": "2016-05-06T08:07:14.544Z"
-    },
-    {
-      "id": 899856236603,
-      "courseName": "HTML",
-      "lecturerName": "Ahser",
-      "hours": 643,
-      "cost": 5820,
+      "hours": 220,
+      "cost": 16936,
       "type": "Programming",
       "dayEvening": [
         "day"
       ],
-      "openDate": "2021-08-12T19:37:45.111Z"
+      "openDate": "2016-01-31T17:28:15.733Z"
     },
     {
-      "id": 661279039717,
-      "courseName": "React",
-      "lecturerName": "Yackob",
-      "hours": 211,
-      "cost": 5702,
-      "type": "Programming",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2015-02-25T10:25:52.672Z"
-    },
-    {
-      "id": 1266282771378,
-      "courseName": "Java Core",
-      "lecturerName": "Moses",
-      "hours": 202,
-      "cost": 18513,
-      "type": "Programming",
-      "dayEvening": [
-        "day"
-      ],
-      "openDate": "2020-10-17T14:33:18.325Z"
-    },
-    {
-      "id": 98634795269,
-      "courseName": "HTML",
-      "lecturerName": "Moses",
-      "hours": 461,
-      "cost": 17986,
-      "type": "Programming",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2018-10-19T14:10:55.012Z"
-    },
-    {
-      "id": 1284100504516,
+      "id": 1031637002211,
       "courseName": "JS",
-      "lecturerName": "Abraham",
-      "hours": 450,
-      "cost": 6824,
-      "type": "QA",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2019-06-27T13:07:05.135Z"
-    },
-    {
-      "id": 1449892112244,
-      "courseName": "Java Technologies",
-      "lecturerName": "Ahser",
-      "hours": 104,
-      "cost": 16459,
+      "lecturerName": "Moses",
+      "hours": 756,
+      "cost": 14438,
       "type": "QA",
       "dayEvening": [
         "day"
       ],
-      "openDate": "2018-08-15T01:45:09.694Z"
+      "openDate": "2019-08-20T23:18:58.598Z"
     },
     {
-      "id": 911748500738,
-      "courseName": "JS",
+      "id": 641906864595,
+      "courseName": "QA automation",
       "lecturerName": "Yosef",
-      "hours": 281,
-      "cost": 5692,
+      "hours": 706,
+      "cost": 17677,
       "type": "QA",
       "dayEvening": [
         "evening"
       ],
-      "openDate": "2016-09-16T22:40:20.951Z"
+      "openDate": "2020-07-05T01:01:55.610Z"
     },
     {
-      "id": 358503283681,
-      "courseName": "CSS",
-      "lecturerName": "Abraham",
-      "hours": 367,
-      "cost": 19571,
+      "id": 569900702932,
+      "courseName": "React",
+      "lecturerName": "Ahser",
+      "hours": 297,
+      "cost": 10141,
       "type": "Programming",
       "dayEvening": [
         "day",
         "evening"
       ],
-      "openDate": "2017-10-23T23:02:15.666Z"
+      "openDate": "2016-12-19T17:47:01.887Z"
     }
   ]
 }
