@@ -4,6 +4,7 @@ import {Observable, from} from 'rxjs'
 
 
 export default class CoursesServiceRest implements CoursesService {
+    private currentResponse = "";
     constructor(private url: string) { }
     async add(course: Course): Promise<Course> {
         try {
@@ -37,9 +38,27 @@ export default class CoursesServiceRest implements CoursesService {
         }
     }
     //TODO FIXME
-    get(id?: number): Observable<Course[]> | Promise<Course> {
-        return id == undefined ? from(this.fetchGet(this.url)) as Observable<Course[]> :
-            this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
+     get(id?: number): Observable<Course[]> | Promise<Course> {
+         if(id == undefined){
+        const observable = new Observable<Course[]>((subscriber) => {
+            const interval = setInterval(async () => {
+                try {
+                    subscriber.next([]);
+                    // const response = await this.fetchGet(this.url);
+                    // if(this.currentResponse !== JSON.stringify(response)){
+                    //     this.currentResponse = response;
+                    //     subscriber.next(response);
+                    // }
+                } catch (err) {
+                    subscriber.error(err)
+                    clearInterval(interval);
+                }
+            }, 1000);
+            return clearInterval(interval);
+        })
+        return observable;
+    }
+        return this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
     }
     private async fetchGet(url: string): Promise<any> {
         const r = await fetch(url);

@@ -14,10 +14,10 @@ const App: FC = () => {
     coursesState.addFn = addCourse;
     coursesState.removeFn = removeCourse;
     poller();
-    const interval = setInterval(poller, 2000);
-    return () => {
-      clearInterval(interval);
-    }
+    // const interval = setInterval(poller, 2000);
+    // return () => {
+    //   clearInterval(interval);
+    // }
   }
   );
 
@@ -31,9 +31,12 @@ const App: FC = () => {
 
   function poller() {
     college.getAllCourses().subscribe({
-      next(arr: any){
+      next(arr: Course[]){
         coursesState.courses = arr;
         setcoursesState({ ...coursesState });
+      },
+      error(err: any) {
+        console.log(err);
       }
     });
     
