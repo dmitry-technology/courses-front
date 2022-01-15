@@ -25,16 +25,29 @@
       "openDate": "2019-08-20T23:18:58.598Z"
     },
     {
-      "id": 641906864595,
-      "courseName": "QA automation",
-      "lecturerName": "Yosef",
-      "hours": 706,
-      "cost": 17677,
+      "id": 345304922791,
+      "courseName": "Java Technologies",
+      "lecturerName": "Moses",
+      "hours": 677,
+      "cost": 19576,
+      "type": "QA",
+      "dayEvening": [
+        "day",
+        "evening"
+      ],
+      "openDate": "2021-05-06T02:33:11.510Z"
+    },
+    {
+      "id": 405617258507,
+      "courseName": "CSS",
+      "lecturerName": "Ahser",
+      "hours": 92,
+      "cost": 13382,
       "type": "QA",
       "dayEvening": [
         "evening"
       ],
-      "openDate": "2020-07-05T01:01:55.610Z"
+      "openDate": "2019-06-07T17:53:32.006Z"
     }
   ]
 }

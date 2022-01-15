@@ -11,18 +11,11 @@ const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
 
   useEffect(() => {
-    coursesState.addFn = addCourse;
-    coursesState.removeFn = removeCourse;
+    coursesState.addFn = (course) => college.addCourse(course);
+    coursesState.removeFn = (id) => college.removeCourse(id);
     pull();
   }
   );
-
-  function addCourse(course: Course) {
-    college.addCourse(course);
-  }
-  function removeCourse(id: number) {
-    college.removeCourse(id);
-  }
 
   function pull() {
     college.getAllCourses().subscribe({

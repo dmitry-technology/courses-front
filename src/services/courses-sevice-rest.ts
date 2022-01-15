@@ -1,7 +1,7 @@
 import Course from "../models/course";
 import CoursesService from "./courses-service";
 import {Observable, from} from 'rxjs'
-
+const DELAY: number = 2000;
 
 export default class CoursesServiceRest implements CoursesService {
     private currentResponse = "";
@@ -39,25 +39,26 @@ export default class CoursesServiceRest implements CoursesService {
     }
 
     get(id?: number): Observable<Course[]> | Promise<Course> {
-         if(id == undefined){
-                return new Observable<Course[]>(subscriber => {
-                    const interval = setInterval(async ()=> {
-                        try {
-                            const courses: Course[] = await this.fetchGet(this.url);
-                                const getResponce: string = JSON.stringify(courses);
-                                if(this.currentResponse !== getResponce){
-                                    this.currentResponse = getResponce;
-                                    subscriber.next(courses);
-                                }
-                        } catch (err) {
-                            subscriber.error(err);
-                            clearInterval(interval);
-                        } 
-                    }, 2000);
-                    return () => clearInterval(interval);
-                })         
-         }
-        return this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
+        return id == undefined ? this.getObservable() : this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
+    }
+
+    private getObservable(): Observable<Course[]>{
+        return new Observable<Course[]>(subscriber => {
+            const interval = setInterval(async ()=> {
+                try {
+                    const courses: Course[] = await this.fetchGet(this.url);
+                        const getResponce: string = JSON.stringify(courses);
+                        if(this.currentResponse !== getResponce){
+                            this.currentResponse = getResponce;
+                            subscriber.next(courses);
+                        }
+                } catch (err) {
+                    subscriber.error(err);
+                    clearInterval(interval);
+                } 
+            }, DELAY);
+            return () => clearInterval(interval);
+        })  
     }
 
     private async fetchGet(url: string): Promise<any> {
