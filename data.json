@@ -35,19 +35,6 @@
         "evening"
       ],
       "openDate": "2020-07-05T01:01:55.610Z"
-    },
-    {
-      "id": 569900702932,
-      "courseName": "React",
-      "lecturerName": "Ahser",
-      "hours": 297,
-      "cost": 10141,
-      "type": "Programming",
-      "dayEvening": [
-        "day",
-        "evening"
-      ],
-      "openDate": "2016-12-19T17:47:01.887Z"
     }
   ]
 }

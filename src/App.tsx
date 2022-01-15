@@ -13,7 +13,7 @@ const App: FC = () => {
   useEffect(() => {
     coursesState.addFn = addCourse;
     coursesState.removeFn = removeCourse;
-    pop();
+    pull();
   }
   );
 
@@ -24,7 +24,7 @@ const App: FC = () => {
     college.removeCourse(id);
   }
 
-  function pop() {
+  function pull() {
     college.getAllCourses().subscribe({
       next(arr: Course[]) {
         coursesState.courses = arr;
