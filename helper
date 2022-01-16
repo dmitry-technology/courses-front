@@ -14,7 +14,9 @@ npm i react-router-dom
 npm i lodash @types/lodash
 //import { createTheme } from '@mui/material/styles';
 npm i -g json-server
+npm i -g json-server-auth
 json-server -p3500 --watch data.json
+json-server-auth -p3500 --watch --routes routes.json data.json
 http://localhost:3500/courses/123
 
 1. pages

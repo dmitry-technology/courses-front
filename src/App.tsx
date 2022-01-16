@@ -26,7 +26,7 @@ const App: FC = () => {
         coursesState.courses = arr;
         setcoursesState({ ...coursesState });
       },
-      error(err: any) {
+      error(err: any): void {
         console.log(err);
       }
     });

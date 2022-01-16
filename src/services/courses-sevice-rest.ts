@@ -2,6 +2,12 @@ import Course from "../models/course";
 import CoursesService from "./courses-service";
 import {Observable, from} from 'rxjs'
 const DELAY: number = 2000;
+export const AUTH_TOKEN = "auth_token";
+
+function getHeaders():{Authorization: string, "Content-Type": string} {
+    return {Authorization: "Bearer " + localStorage.getItem(AUTH_TOKEN), 
+    "Content-Type": "application/json"}
+}
 
 export default class CoursesServiceRest implements CoursesService {
     private currentResponse = "";
@@ -10,9 +16,7 @@ export default class CoursesServiceRest implements CoursesService {
         try {
             const response = await fetch(this.url, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: getHeaders(),
                 body: JSON.stringify(course)
             });
             return await response.json();
