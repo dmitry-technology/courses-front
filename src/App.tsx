@@ -7,18 +7,21 @@ import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
 import { college } from './config/servicesConfig'
 import Course from './models/course';
+import { Subscription } from 'rxjs'
+
 const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
 
   useEffect(() => {
     coursesState.addFn = (course) => college.addCourse(course);
     coursesState.removeFn = (id) => college.removeCourse(id);
-    pull();
+    const subscription = getData();
+    return () => subscription.unsubscribe();
   }
   );
 
-  function pull() {
-    college.getAllCourses().subscribe({
+  function getData(): Subscription {
+    return college.getAllCourses().subscribe({
       next(arr: Course[]) {
         coursesState.courses = arr;
         setcoursesState({ ...coursesState });

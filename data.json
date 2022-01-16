@@ -38,16 +38,16 @@
       "openDate": "2021-05-06T02:33:11.510Z"
     },
     {
-      "id": 405617258507,
-      "courseName": "CSS",
-      "lecturerName": "Ahser",
-      "hours": 92,
-      "cost": 13382,
-      "type": "QA",
+      "id": 1065777803111,
+      "courseName": "Java Technologies",
+      "lecturerName": "Naftaly",
+      "hours": 619,
+      "cost": 14327,
+      "type": "Programming",
       "dayEvening": [
         "evening"
       ],
-      "openDate": "2019-06-07T17:53:32.006Z"
+      "openDate": "2018-09-13T15:29:23.194Z"
     }
   ]
 }
