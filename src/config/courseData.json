@@ -39,6 +39,7 @@
     "costDivider": [
         1000, 2000, 3000, 5000, 10000
     ],
-    "pollerInterval": 2000
+    "pollerInterval": 2000,
+    "passwordLength" : 8
 
 }

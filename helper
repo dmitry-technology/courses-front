@@ -12,6 +12,7 @@ mui: npm install @mui/material @emotion/react @emotion/styled
 npm install @fontsource/roboto
 npm i react-router-dom
 npm i lodash @types/lodash
+npm install buffer
 //import { createTheme } from '@mui/material/styles';
 npm i -g json-server
 npm i -g json-server-auth

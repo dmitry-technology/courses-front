@@ -14,6 +14,7 @@ export default class CoursesServiceRest implements CoursesService {
     constructor(private url: string) { }
     async add(course: Course): Promise<Course> {
         try {
+            (course as any).userId = 1;
             const response = await fetch(this.url, {
                 method: "POST",
                 headers: getHeaders(),
@@ -29,13 +30,16 @@ export default class CoursesServiceRest implements CoursesService {
         const oldCourse = await this.get(id);
         await fetch(this.getUrlId(id),
             {
-                method: "DELETE"
+                method: "DELETE",
+                headers: getHeaders()
             });
         return oldCourse as Course;
     }
     async exists(id: number): Promise<boolean> {
         try {
-            const response = await fetch(this.getUrlId(id));
+            const response = await fetch(this.getUrlId(id), {
+                headers: getHeaders()
+            });
             return response.ok;
         } catch (err) {
             throw "server is not available";
@@ -66,7 +70,9 @@ export default class CoursesServiceRest implements CoursesService {
     }
 
     private async fetchGet(url: string): Promise<any> {
-        const r = await fetch(url);
+        const r = await fetch(url, {
+            headers: getHeaders()
+        });
         return await r.json();
     }
 
@@ -78,9 +84,7 @@ export default class CoursesServiceRest implements CoursesService {
         const oldCourse = await this.get(id);
         const response = await fetch(this.getUrlId(id), {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: getHeaders(),
             body: JSON.stringify(newCourse)
         });
         return oldCourse as Course;
