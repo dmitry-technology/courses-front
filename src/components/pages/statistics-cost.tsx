@@ -12,7 +12,7 @@ const intervalDivider: number[] = [
 export const StatisticsCost: FC = () => {
   const storeValue = useContext(CoursesContext);
 
-  const [interval=10, setInterval] = React.useState<number>(0);
+  const [interval, setInterval] = React.useState<number>(1000);
 
   function getListElements() {
 
@@ -42,7 +42,7 @@ export const StatisticsCost: FC = () => {
       <Select
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
-        value={intervalDivider}
+        // value={intervalDivider}
         onChange={handleChange}
         input={<OutlinedInput label="Name" />}
       >

@@ -10,9 +10,9 @@ export const Courses: FC = () => {
   return <Box sx={{display: "flex", flexDirection: "column"}}>
     <Typography variant="h3">courses</Typography>
     <List>
-    {storeValue.courses.map((element)=> {
-       return   <ListItem>
-              <ListItemButton onClick={() => (storeValue.removeFn && storeValue.removeFn(element.id))}><Delete/> </ListItemButton>
+    {storeValue.courses.map((element, index)=> {
+       return   <ListItem key={index}>
+              {storeValue.userData.isAdmin && <ListItemButton onClick={() => (storeValue.removeFn && storeValue.removeFn(element.id))}><Delete/> </ListItemButton>}
               <ListItemText primary={JSON.stringify(element)}/>
            
         </ListItem>
@@ -20,20 +20,3 @@ export const Courses: FC = () => {
     </List>
   </Box>
 }
-
-
-
-
-
-{/* <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Trash" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemText primary="Spam" />
-            </ListItemButton>
-          </ListItem>
-        </List> */}

@@ -9,18 +9,33 @@ import { authService, college } from './config/servicesConfig'
 import Course from './models/course';
 import { Subscription } from 'rxjs'
 import { nonAuthorizedUser, UserData } from './models/common/user-data';
+import { RouteType } from './models/common/route-type';
 
+function getRelevantRoutes(userData: UserData): RouteType[] {
+  return routes.filter(r => 
+  (!!userData.userName && r.authenticated) || 
+  (userData.isAdmin && r.adminOnly) ||
+  (!userData.userName && !r.authenticated && !r.adminOnly));
+}
 const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
+  
+  useEffect(() => {
+    const subscriptionUserData = getUserData();
+    return () => {
+      subscriptionUserData.unsubscribe();
+    }
+  }, []);
 
   useEffect(() => {
     coursesState.addFn = (course) => college.addCourse(course);
     coursesState.removeFn = (id) => college.removeCourse(id);
-    const subscriptionUserData = getUserData();
+
     const subscription = getData();
     return () => subscription.unsubscribe();
-  }
-  );
+  }, []);
+
+
 
   function getUserData(): Subscription {
     return authService.getUserData().subscribe({
@@ -48,26 +63,15 @@ const App: FC = () => {
 
   function getRoutes(): ReactNode[] {
     const userData: UserData = coursesState.userData;
-    return routes
-    .filter(e => {
-      if (userData === nonAuthorizedUser){
-        return !e.authenticated;
-      } else {
-        if (userData.isAdmin){
-          return e.authenticated && e.adminOnly;
-        } else {
-          return e.authenticated && !e.adminOnly;
-        }
-      }
-    })
-    .map((e) => <Route key={e.path} path={e.path} element={e.element} />);
+    return getRelevantRoutes(userData)
+      .map((e) => <Route key={e.path} path={e.path} element={e.element} />);
   }
   return <CoursesContext.Provider value={coursesState}>
     <BrowserRouter>
-      <NavigatorResposive items={routes} />
-        <Routes>{getRoutes()}
-          <Route path='/' element={<Navigate to={PATH_LOGIN} />} />
-        </Routes>
+      <NavigatorResposive items={getRelevantRoutes(coursesState.userData)} />
+      <Routes>{getRoutes()}
+        <Route path='/' element={<Navigate to={!coursesState.userData.userName ? PATH_LOGIN : PATH_COURSES} />} />
+      </Routes>
     </BrowserRouter>
   </CoursesContext.Provider>
 }

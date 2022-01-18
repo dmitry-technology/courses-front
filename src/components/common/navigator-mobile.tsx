@@ -1,5 +1,5 @@
 import { AppBar, Box, Container, Drawer, IconButton, Tab, Tabs, Toolbar, Typography } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -24,8 +24,13 @@ const NavigatorDrawer: FC<{ items: RouteType[] }> = ({ items }) => {
 
     const path = useLocation().pathname;
 
-    const [label, setLabel] = useState(getActiveLabel(path, items));
     const [activeTabIndex, setActiveTab] = useState(getInitialActiveTabIndex(path, items));
+    const [label, setLabel] = useState(getActiveLabel(path, items));
+
+    useEffect(() => {
+        setActiveTab(getInitialActiveTabIndex(path, items));
+        setLabel(getActiveLabel(path, items));
+    }, [items])
 
     document.title = label;
 
@@ -47,7 +52,7 @@ const NavigatorDrawer: FC<{ items: RouteType[] }> = ({ items }) => {
         <Tabs
             orientation={orientation}
             variant="scrollable"
-            value={activeTabIndex}
+            value={activeTabIndex >= items.length ? 0 : activeTabIndex}
             onChange={onChangeHandler}
         >
             {items.map((item, index) => (
