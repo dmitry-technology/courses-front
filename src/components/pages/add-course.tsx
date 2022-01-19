@@ -2,15 +2,33 @@ import { Typography, Box, Button } from "@mui/material";
 import React, { FC, useContext } from "react";
 import CoursesContext from "../../store/context";
 import { createRandomCourse } from '../../util/random-courses';
+import { StoreType } from "../../models/course-store-type";
+import FormGetObject from "../form-get-object";
+import courseData from "../../config/courseData.json"
+
 
 
 export const AddCourse: FC = () => {
-  const storeValue = useContext(CoursesContext);
-    return <Box sx={{display: "flex", flexDirection: "column"}}>
-      <Typography variant="h3">
-        Add Course
-      </Typography>
-      <Button  onClick={()=>(storeValue.addFn!(createRandomCourse()))}>Add course</Button>
-    </Box>
+
+  function onclick() {
+
+  }
+  return <Box>
+    <Typography variant="h3">Add Course</Typography>
+    <Button onClick={onclick}>Add course</Button>
+    <FormGetObject config={courseData} />
+  </Box>
 
 }
+
+type Course = {
+  id: number;
+  courseName: string;
+  lecturerName: string;
+  hours: number;
+  cost: number;
+  type: string;
+  dayEvening: string[];
+  openDate: Date;
+}
+

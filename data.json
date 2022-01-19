@@ -14,42 +14,30 @@
       "userId": 1
     },
     {
-      "id": 1541128235569,
+      "id": 160260291849,
       "courseName": "QA manual",
-      "lecturerName": "Yosef",
-      "hours": 137,
-      "cost": 11055,
-      "type": "QA",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2016-05-05T16:13:43.511Z",
-      "userId": 1
-    },
-    {
-      "id": 730482222283,
-      "courseName": "Java Technologies",
-      "lecturerName": "Abraham",
-      "hours": 680,
-      "cost": 12327,
+      "lecturerName": "Ahser",
+      "hours": "500",
+      "cost": "10000",
       "type": "Programming",
       "dayEvening": [
         "evening"
       ],
-      "openDate": "2015-08-20T01:10:32.698Z",
+      "openDate": "2022-01-12T00:00:00.000Z",
       "userId": 1
     },
     {
-      "id": 1312997789824,
-      "courseName": "QA automation",
+      "id": 160260291850,
+      "courseName": "QA manual",
       "lecturerName": "Moses",
-      "hours": 345,
-      "cost": 7755,
+      "hours": "500",
+      "cost": "10000",
       "type": "Programming",
       "dayEvening": [
-        "day"
+        "day",
+        "evening"
       ],
-      "openDate": "2017-02-02T17:40:43.800Z",
+      "openDate": "2022-01-19T12:55:04.075Z",
       "userId": 1
     }
   ],

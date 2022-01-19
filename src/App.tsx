@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
 import { PATH_COURSES, PATH_LOGIN, routes } from './config/routes-config';
@@ -10,6 +10,7 @@ import Course from './models/course';
 import { Subscription } from 'rxjs'
 import { nonAuthorizedUser, UserData } from './models/common/user-data';
 import { RouteType } from './models/common/route-type';
+import { Typography } from '@mui/material';
 
 function getRelevantRoutes(userData: UserData): RouteType[] {
   return routes.filter(r => 
@@ -20,6 +21,11 @@ function getRelevantRoutes(userData: UserData): RouteType[] {
 const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
   
+  const [relevantRoutes, setRelevantRoutes] = useState<RouteType[]>(routes);
+  useEffect(() => {
+    setRelevantRoutes(getRelevantRoutes(coursesState.userData));
+    
+  }, [coursesState.userData])
   useEffect(() => {
     const subscriptionUserData = getUserData();
     return () => {
@@ -62,15 +68,14 @@ const App: FC = () => {
   }
 
   function getRoutes(): ReactNode[] {
-    const userData: UserData = coursesState.userData;
-    return getRelevantRoutes(userData)
+    return relevantRoutes
       .map((e) => <Route key={e.path} path={e.path} element={e.element} />);
   }
   return <CoursesContext.Provider value={coursesState}>
     <BrowserRouter>
-      <NavigatorResposive items={getRelevantRoutes(coursesState.userData)} />
+      <NavigatorResposive items={relevantRoutes} />
       <Routes>{getRoutes()}
-        <Route path='/' element={<Navigate to={!coursesState.userData.userName ? PATH_LOGIN : PATH_COURSES} />} />
+        <Route path='*' element={<Navigate to={relevantRoutes[0].path}/>}></Route>
       </Routes>
     </BrowserRouter>
   </CoursesContext.Provider>
