@@ -1,5 +1,5 @@
 import { Typography, Box, Button } from "@mui/material";
-import React, { FC, useContext } from "react";
+import { FC, useContext } from "react";
 import CoursesContext from "../../store/context";
 import { createRandomCourse } from '../../util/random-courses';
 import { StoreType } from "../../models/course-store-type";
@@ -9,9 +9,10 @@ import courseData from "../../config/courseData.json"
 
 
 export const AddCourse: FC = () => {
+  const storeValue = useContext<StoreType>(CoursesContext);
 
   function onclick() {
-
+    storeValue.addFn!(createRandomCourse());
   }
   return <Box>
     <Typography variant="h3">Add Course</Typography>

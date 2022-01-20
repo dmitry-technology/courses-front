@@ -39,6 +39,45 @@
       ],
       "openDate": "2022-01-19T12:55:04.075Z",
       "userId": 1
+    },
+    {
+      "id": 508996206360,
+      "courseName": "Java Core",
+      "lecturerName": "Moses",
+      "hours": 459,
+      "cost": 16009,
+      "type": "QA",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2016-08-20T05:57:07.651Z",
+      "userId": 1
+    },
+    {
+      "id": 955089330485,
+      "courseName": "HTML",
+      "lecturerName": "Abraham",
+      "hours": 385,
+      "cost": 5935,
+      "type": "QA",
+      "dayEvening": [
+        "evening"
+      ],
+      "openDate": "2020-07-20T02:36:28.801Z",
+      "userId": 1
+    },
+    {
+      "id": 9477210899,
+      "courseName": "HTML",
+      "lecturerName": "Naftaly",
+      "hours": 700,
+      "cost": 5638,
+      "type": "Programming",
+      "dayEvening": [
+        "evening"
+      ],
+      "openDate": "2021-02-21T12:16:20.214Z",
+      "userId": 1
     }
   ],
   "users": [

@@ -1,12 +1,21 @@
-import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, Typography, List, ListItem, Container, Grid, ListItemButton, ListItemText, Box } from "@mui/material";
 import _ from "lodash";
 import React, { FC, useContext } from "react";
 import CoursesContext from "../../store/context";
 import { getStatistics } from "../../util/courses-utils";
+import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import Paper from '@mui/material/Paper';
+import Graph from "../common/graph";
 
 
 const intervalDivider: number[] = [
   1000, 2000, 3000, 5000, 10000
+];
+
+const columns: GridColDef[] = [
+  { field: 'from', headerName: 'From', width: 150 },
+  { field: 'to', headerName: 'To', width: 150 },
+  { field: 'amount', headerName: 'Amount', width: 150 }
 ];
 
 export const StatisticsCost: FC = () => {
@@ -15,17 +24,45 @@ export const StatisticsCost: FC = () => {
   const [interval, setInterval] = React.useState<number>(1000);
 
   function getListElements() {
-
     let res = getStatistics(storeValue.courses, interval, true);
-   
-    if(!!res[0].maxInterval == false){
-      return <ListItem></ListItem>
-    }
-    return res.map(element => {
-      return <ListItem>
-        <ListItemText>min={element.minInterval}   max={element.maxInterval} amount={element.amount} </ListItemText>
-      </ListItem>
-    })
+    const rows: GridRowsProp = res.map((e, i) => {
+        return { id: i, from: e.minInterval, to: e.maxInterval, amount: e.amount };
+      });
+    return (<div style={{ height: 300, width: '100%' }}>
+      <DataGrid rows={rows} columns={columns} />
+      <Box sx={{ display: 'flex' }}>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Grid container spacing={3}>
+              {/* Chart */}
+              <Grid item xs={12} md={8} lg={9}> 
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 240,
+                  }}
+                >
+                  <Graph value={res}/>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      </Box>
+    </div>)
   }
 
   const handleChange = (event: any) => {
@@ -42,7 +79,7 @@ export const StatisticsCost: FC = () => {
       <Select
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
-        // value={intervalDivider}
+        value={interval}
         onChange={handleChange}
         input={<OutlinedInput label="Name" />}
       >
@@ -56,11 +93,9 @@ export const StatisticsCost: FC = () => {
         ))}
       </Select>
     </FormControl>
-
     <List>
       {getListElements()}
     </List>
-
   </div>
 }
 

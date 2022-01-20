@@ -16,6 +16,8 @@ npm install buffer
 //import { createTheme } from '@mui/material/styles';
 npm i -g json-server
 npm i -g json-server-auth
+npm install @mui/x-data-grid
+
 json-server -p3500 --watch data.json
 json-server-auth -p3500 --watch --routes routes.json data.json
 http://localhost:3500/courses/123

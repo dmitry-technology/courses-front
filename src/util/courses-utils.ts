@@ -10,8 +10,8 @@ export function getStatistics(courses:Course[], interval: number, isCost:boolean
     });
 
     return Object.entries(objCnt).map(([key, value]) => {
-      let minInterval = key;
-      let maxInterval = +key + +key - 1;
+      let minInterval = +key;
+      let maxInterval = +key + +interval - 1;
       let amount = value;
       return { minInterval: minInterval, maxInterval: maxInterval, amount: amount}
     });
