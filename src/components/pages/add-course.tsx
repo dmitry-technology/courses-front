@@ -3,7 +3,7 @@ import React, { FC, useContext } from "react";
 import CoursesContext from "../../store/context";
 import { createRandomCourse } from '../../util/random-courses';
 import { StoreType } from "../../models/course-store-type";
-import FormGetObject from "../form-get-object";
+import FormGetObject from "../form-get-course";
 import courseData from "../../config/courseData.json"
 
 
