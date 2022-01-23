@@ -6,6 +6,7 @@ import { Login } from '../components/pages/login';
 import { Logout } from '../components/pages/logout';
 import { AddCourse } from "../components/pages/add-course";
 import { RouteType } from "../models/common/route-type";
+import Generation from "../components/pages/generation";
 
 
 export const PATH_COURSES = "/courses";
@@ -26,3 +27,6 @@ export const routes: RouteType[] = [
     {path:PATH_STATISTICS_HOURS, element:<StatisticsHours/>, label: `Hours Statistics`, authenticated: true}
 ]
 
+export const developmentRoutes: RouteType[] = [
+    {path:"/courses/developmet/generattion", element:<Generation/>, label:'Courses Generation', adminOnly:true}
+]

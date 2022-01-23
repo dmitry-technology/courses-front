@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
-import { PATH_COURSES, PATH_LOGIN, routes } from './config/routes-config';
+import { developmentRoutes, PATH_COURSES, PATH_LOGIN, routes } from './config/routes-config';
 import CoursesContext, { initialCourses } from './store/context';
 import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
@@ -13,7 +13,11 @@ import { RouteType } from './models/common/route-type';
 import { Typography } from '@mui/material';
 
 function getRelevantRoutes(userData: UserData): RouteType[] {
-  return routes.filter(r => 
+  let resRoutes = routes;
+  if(process.env.NODE_ENV === 'development') {
+    resRoutes = resRoutes.concat(developmentRoutes);
+  }
+  return resRoutes.filter(r => 
   (!!userData.userName && r.authenticated) || 
   (userData.isAdmin && r.adminOnly) ||
   (!userData.userName && !r.authenticated && !r.adminOnly));

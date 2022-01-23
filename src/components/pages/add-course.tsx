@@ -10,7 +10,6 @@ import courseData from "../../config/courseData.json"
 
 export const AddCourse: FC = () => {
   const storeValue = useContext<StoreType>(CoursesContext);
-
   function onclick() {
     storeValue.addFn!(createRandomCourse());
   }

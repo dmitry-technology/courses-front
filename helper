@@ -20,6 +20,15 @@ npm install @mui/x-data-grid
 
 json-server -p3500 --watch data.json
 json-server-auth -p3500 --watch --routes routes.json data.json
+json-server-auth -p3500 --routes routes.json data.json
 http://localhost:3500/courses/123
 
-1. pages
+1. navigator (routes, context)
+2. processing (rest)
+3. provider (colledg)
+4. login/logout
+5. statistics 
+5. generator in dev
+6. 
+
+npm run build
