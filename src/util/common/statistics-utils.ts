@@ -1,12 +1,11 @@
 import _ from "lodash";
-import Course from "../models/course";
 
     
     
-export function getStatistics(courses:Course[], interval: number, isCost:boolean) {
-    let variant = isCost ? "cost" : "hours";
-    let objCnt = _.countBy(courses, e => {
-      return Math.floor((e as any)[variant] / interval) * interval;
+export function getStatistics(objects: object[], interval: number, field: string) {
+    
+    let objCnt = _.countBy(objects, e => {
+      return Math.floor((e as any)[field] / interval) * interval;
     });
 
     return Object.entries(objCnt).map(([key, value]) => {

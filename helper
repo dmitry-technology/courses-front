@@ -32,3 +32,4 @@ http://localhost:3500/courses/123
 6. 
 
 npm run build
+serf -n build

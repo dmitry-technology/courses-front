@@ -1,5 +1,6 @@
 import CoursesService from "./courses-service";
 import {Observable} from 'rxjs'
+import { map } from "rxjs/operators";
 import Course from "../models/course";
 
 
@@ -24,7 +25,8 @@ export default class College {
         return this.coursesSerivece.exists(id);
     }
     getAllCourses(): Observable<Course[]> {
-        return this.coursesSerivece.get() as Observable<Course[]>;
+        return (this.coursesSerivece.get() as Observable<Course[]>)
+        .pipe(map(courses => courses.map(course => ({...course, openDate: new Date(course.openDate)}))));
     }
 
 }
