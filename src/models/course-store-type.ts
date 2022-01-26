@@ -4,6 +4,7 @@ import Course from "./course";
 export type StoreType = {
     courses: Course[];
     userData: UserData;
-    addFn?: (course: Course) => void;
-    removeFn?: (id: number) => void;
+    addFn: (course: Course) => Promise<Course>;
+    removeFn: (id: number) => Promise<Course>;
+    updateFn: (id: number, course: Course) => Promise<Course>;
 }

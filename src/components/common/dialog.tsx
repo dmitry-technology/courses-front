@@ -24,7 +24,7 @@ const DialogConfirm: FC<DialogProps> = (params) => {
     return <Dialog
         fullScreen={fullScreen}
         open={visible}
-        onClose={onClose}
+        onClose={()=>onClose(false)}
         aria-labelledby="responsive-dialog-title"
     >
         <DialogTitle id="responsive-dialog-title">

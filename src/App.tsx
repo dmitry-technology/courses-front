@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
 import { developmentRoutes, PATH_COURSES, PATH_LOGIN, routes } from './config/routes-config';
@@ -8,9 +8,8 @@ import _ from 'lodash';
 import { authService, college } from './config/servicesConfig'
 import Course from './models/course';
 import { Subscription } from 'rxjs'
-import { nonAuthorizedUser, UserData } from './models/common/user-data';
+import { UserData } from './models/common/user-data';
 import { RouteType } from './models/common/route-type';
-import { Typography } from '@mui/material';
 
 function getRelevantRoutes(userData: UserData): RouteType[] {
   let resRoutes = routes;
@@ -38,12 +37,10 @@ const App: FC = () => {
   }, []);
 
   useEffect(() => {
-    coursesState.addFn = (course) => college.addCourse(course);
-    coursesState.removeFn = (id) => college.removeCourse(id);
-
     const subscription = getData();
     return () => subscription.unsubscribe();
   }, []);
+
 
 
 
