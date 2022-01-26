@@ -11,23 +11,18 @@ import ModalInfo from "../common/modal-info";
 import { useMediaQuery } from "react-responsive";
 import mediaQuery from "../../config/media-query.json"
 import courseData from "../../config/courseData.json"
-
-const { mobile, laptop, desktop } = { ...mediaQuery };
+import { createRandomCourse } from "../../util/random-courses";
 
 
 function getRows(courses: Course[]): GridRowsProp {
   return courses.map(course => course);
 }
 
-type Update = {
+type UpdateType = {
   old: Course;
   new: Course;
 }
-
-const styleError = {
-  bgcolor: 'rgb(126,10,15, 0.1)',
-  color: '#750f0f'
-}
+const initUpdateType = {old: createRandomCourse(), new: createRandomCourse()};
 
 const StyledBox = styled(Box)(({ theme }) => ({
   height: '100%',
@@ -51,7 +46,7 @@ export const Courses: FC = () => {
   const storeValue = useContext(CoursesContext);
   const [dialogVisible, setdialogVisible] = useState(false);
   const [dialogUpdate, setDialogUpdate] = useState(false);
-  const courseUpdate = useRef<Update>({} as Update);
+  const courseUpdate = useRef<UpdateType>(initUpdateType);
   const currentCourses = useRef<Course[]>(storeValue.courses);
   const [isUpdate, setisUpdate] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -189,7 +184,7 @@ export const Courses: FC = () => {
 
     </Paper>
     <ModalInfo title={"Detailed information about the courses"} message={textModal.current} visible={modalVisible} callBack={() => setModalVisible(false)} />
-    <DialogConfirm visible={dialogUpdate} title={"Update course"} message={`are you want to update course?`} onClose={handleUpdate} />
+    <DialogConfirm visible={dialogUpdate} title={"Update course"} message={`are you want to update course with ID  ${courseUpdate.current.old.id}?`} onClose={handleUpdate} />
     <DialogConfirm visible={dialogVisible} title={"Course remove"} message={`are you want to remove course with ID ${idCourse}`} onClose={handleRemove} />
   </Box>
 }
