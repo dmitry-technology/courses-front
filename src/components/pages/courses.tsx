@@ -75,14 +75,7 @@ export const Courses: FC = () => {
   function getColums(userData: UserData): any[] {
     const col: any[] = [
       {
-        field: "courseName", headerName: "Course Name", flex: 150, align: 'center', headerAlign: 'center',
-        type: 'singleSelect',
-        valueOptions: courseData.courseName,
-        preProcessEditCellProps: (params: any) => {
-          const courseName = params.props.value
-          const hasError = courseData.courseName.includes(courseName);
-          return { ...params.props, error: hasError };
-        }
+        field: "courseName", headerName: "Course Name", flex: 150, align: 'center', headerAlign: 'center'
       },
       {
         field: "lecturerName", headerName: "Lecturer", editable: userData.isAdmin, align: 'center', headerAlign: 'center',
@@ -110,7 +103,15 @@ export const Courses: FC = () => {
           return { ...params.props, error: hasError };
         }
       },
-      { field: "openDate", headerName: "Openning Date", type: "date", editable: userData.isAdmin, align: 'center', headerAlign: 'center', flex: 200 },
+      {
+        field: "openDate", headerName: "Openning Date", type: "date", editable: userData.isAdmin, align: 'center', headerAlign: 'center', flex: 200,
+        preProcessEditCellProps: (params: any) => {
+          const date = params.props.value;
+          console.log((date as Date).getFullYear());
+          const hasError = +(date as Date).getFullYear() < courseData.minYear || +(date as Date).getFullYear() > courseData.maxYear;
+          return { ...params.props, error: hasError };
+        }
+      },
       {
         field: 'actions', type: 'actions', flex: 80,
         getActions: (params: GridRowParams) => {
