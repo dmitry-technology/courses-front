@@ -48,12 +48,11 @@ export const Courses: FC = () => {
   const [dialogUpdate, setDialogUpdate] = useState(false);
   const courseUpdate = useRef<UpdateType>(initUpdateType);
   const currentCourses = useRef<Course[]>(storeValue.courses);
-  const [isUpdate, setisUpdate] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const textModal = useRef<string[]>(['']);
   const [idCourse, setIdCourse] = useState(-1);
   const [colums, setColums] = useState<GridColDef[]>(getColums(storeValue.userData));
-  const rows = useMemo(() => {setisUpdate(false); return getRows(storeValue.courses);}, [storeValue, isUpdate]);
+  const rows = useMemo(() => getRows(storeValue.courses), [storeValue, dialogUpdate]);
   useEffect(() => setColums(getColums(storeValue.userData)), [storeValue, currentMedia]);
 
 
@@ -153,7 +152,6 @@ export const Courses: FC = () => {
       storeValue.updateFn(courseUpdate.current.old.id, courseUpdate.current.new);
     } 
     setDialogUpdate(false);
-    setisUpdate(true);
   }
 
   function showDetails(id: GridRowId) {
