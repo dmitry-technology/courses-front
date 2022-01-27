@@ -53,7 +53,7 @@ export default class CoursesServiceRest implements CoursesService {
     }
 
     private getObservable(): Observable<Course[]> {
-        return new Observable<Course[]>(subscriber => {
+        return new Observable<Course[]>(observer => {
             const interval = setInterval(async () => {
                 try {
                     if (!!localStorage.getItem(AUTH_TOKEN)) {
@@ -61,11 +61,14 @@ export default class CoursesServiceRest implements CoursesService {
                         const getResponce: string = JSON.stringify(courses);
                         if (this.currentResponse !== getResponce) {
                             this.currentResponse = getResponce;
-                            subscriber.next(courses);
+                            observer.next(courses);
                         }
                     }
                 } catch (err) {
-                    subscriber.error(err);
+                    console.log("error in get");
+                    
+                    this.currentResponse = "";
+                    observer.error(err);
                     clearInterval(interval);
                 }
             }, DELAY);
@@ -74,10 +77,16 @@ export default class CoursesServiceRest implements CoursesService {
     }
 
     private async fetchGet(url: string): Promise<any> {
+
         const r = await fetch(url, {
             headers: getHeaders()
         });
+        if (r.status === 401 || r.status === 403) {
+            localStorage.setItem(AUTH_TOKEN, '');
+            throw Error(`${r.status}`);
+        }
         return await r.json();
+
     }
 
     private getUrlId(id: number) {

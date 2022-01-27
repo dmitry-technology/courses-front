@@ -26,7 +26,7 @@ const ModalInfo: FC<{ title: string, message: string[], visible: boolean, callBa
                 {props.title}
             </Typography>
             <List id="modal-modal-description" sx={{ mt: 2 }}>
-                {props.message.map(e => <ListItem>{e}</ListItem>)}
+                {props.message.map((e, i) => <ListItem key={i}>{e}</ListItem>)}
             </List>
         </Box>
     </Modal>

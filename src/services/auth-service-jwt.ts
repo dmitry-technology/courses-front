@@ -15,11 +15,15 @@ export default class AuthServiceJWT implements AuthService {
             this.cashe = JSON.stringify(userData);
             subscribe.next(userData);
             setInterval(() => {
-                userData = fetchUserData();
-                const userDataJSON = JSON.stringify(userData);
-                if (userDataJSON !== this.cashe) {
-                    this.cashe = userDataJSON;
-                    subscribe.next(userData);
+                try {
+                    userData = fetchUserData();
+                    const userDataJSON = JSON.stringify(userData);
+                    if (userDataJSON !== this.cashe) {
+                        this.cashe = userDataJSON;
+                        subscribe.next(userData);
+                    }
+                } catch (err) {
+                    console.log("err in auth");
                 }
             }, pollingInterval);
         });

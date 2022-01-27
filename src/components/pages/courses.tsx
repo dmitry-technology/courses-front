@@ -1,7 +1,7 @@
 import { Box, Paper, styled, useTheme } from "@mui/material";
 import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
 import CoursesContext from "../../store/context";
-import { Delete } from "@mui/icons-material"
+import { Delete, ThirtyFpsSharp } from "@mui/icons-material"
 import { UserData } from "../../models/common/user-data";
 import { DataGrid, GridActionsCellItem, GridCallbackDetails, GridCellEditCommitParams, GridColDef, GridRowId, GridRowParams, GridRowsProp } from "@mui/x-data-grid";
 import Course from "../../models/course";
@@ -9,9 +9,10 @@ import DialogConfirm from "../common/dialog";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ModalInfo from "../common/modal-info";
 import { useMediaQuery } from "react-responsive";
-import mediaQuery from "../../config/media-query.json"
+// import mediaQuery from "../../config/media-query"
 import courseData from "../../config/courseData.json"
 import { createRandomCourse } from "../../util/random-courses";
+import { ConfirmationData, emptyConfirmationData } from "../../models/common/confirmation-type";
 
 
 function getRows(courses: Course[]): GridRowsProp {
@@ -42,8 +43,9 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
 export const Courses: FC = () => {
   const [currentMedia, setcurrentMedia] = useState("");
-
   const storeValue = useContext(CoursesContext);
+  const confirmationData = useRef<ConfirmationData>(emptyConfirmationData);
+
   const [dialogVisible, setdialogVisible] = useState(false);
   const [dialogUpdate, setDialogUpdate] = useState(false);
   const courseUpdate = useRef<UpdateType>(initUpdateType);
@@ -147,6 +149,12 @@ export const Courses: FC = () => {
     setdialogVisible(false);
   }
 
+  function handleUpdateBind(course:Course, status: boolean): void {
+    if (status) {
+      storeValue.updateFn(courseUpdate.current.old.id, courseUpdate.current.new);
+    } 
+    setDialogUpdate(false);
+  }
   function handleUpdate(status: boolean): void {
     if (status) {
       storeValue.updateFn(courseUpdate.current.old.id, courseUpdate.current.new);
@@ -167,11 +175,27 @@ export const Courses: FC = () => {
   }
 
   function onEdit(params: GridCellEditCommitParams) {
+    const id: number = +params.id;
+    const oldCourse = findCourseById(id);
+    const newCourse = {...oldCourse, [params.field]:params.value};
+    if(oldCourse !== newCourse) {
+      confirmationData.current.message = `Do you want update course ID ${oldCourse?.id} old value ${(oldCourse as any)[params.field]} new value ${params.value}`;
+      confirmationData.current.title = `update course`;
+      confirmationData.current.handle = handleUpdateBind.bind(undefined, newCourse as Course);
+      setDialogUpdate(true);
+    }
+    
+    
+
     currentCourses.current = storeValue.courses;
     courseUpdate.current.old = storeValue.courses.find(e => e.id === +params.id) as Course;
     courseUpdate.current.new = { ...courseUpdate.current.old };
     (courseUpdate.current.new as any)[params.field] = params.value;
     setDialogUpdate(true);
+  }
+
+  function findCourseById(id:number): Course | undefined {
+    return storeValue.courses.find(e => e.id === id);
   }
 
   return <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

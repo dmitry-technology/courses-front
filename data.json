@@ -1,19 +1,6 @@
 {
   "courses": [
     {
-      "id": 579486017483,
-      "courseName": "JS",
-      "lecturerName": "Yosef",
-      "hours": 90,
-      "cost": 14552,
-      "type": "QA",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2017-04-08T17:53:24.809Z",
-      "userId": 1
-    },
-    {
       "id": 1381992177529,
       "courseName": "Java Technologies",
       "lecturerName": "Ahser",
@@ -64,20 +51,6 @@
         "evening"
       ],
       "openDate": "2021-12-08T06:09:04.414Z",
-      "userId": 1
-    },
-    {
-      "id": 160511094828,
-      "courseName": "QA manual",
-      "lecturerName": "Moses",
-      "hours": 406,
-      "cost": 9999,
-      "type": "QA",
-      "dayEvening": [
-        "day",
-        "evening"
-      ],
-      "openDate": "2022-06-16T14:00:54.897Z",
       "userId": 1
     },
     {
