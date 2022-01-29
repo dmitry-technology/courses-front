@@ -8,14 +8,15 @@ export enum CourseFields {
     cost = "cost",
     type = "type",
     dayEvening = "dayEvening",
-    openDate = "openDate"   
+    openDate = "openDate",
+    actions = "actions" 
 }
 
-function getCoursesFields() {
-    // let fields = new Map<string, CourseFields[]>([
-    //     []
-    // ]);
-
-    // return fields;
+export function getCoursesFields(): Map<string, CourseFields[]> {
+    return new Map<string, CourseFields[]>([
+        ["isMobile", [CourseFields.courseName, CourseFields.openDate]],
+        ["isLaptop", [CourseFields.courseName, CourseFields.lecturerName, CourseFields.openDate, CourseFields.actions]],
+        ["isDesktop", [CourseFields.courseName, CourseFields.lecturerName, CourseFields.hours, CourseFields.cost, CourseFields.openDate, CourseFields.actions]], 
+    ]);
 }
 

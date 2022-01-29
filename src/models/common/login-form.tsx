@@ -28,11 +28,15 @@ const LoginForm: FC<LoginFormProps> = (props) => {
 
     async function onSubmit(event: any) {
         event.preventDefault();
-        const res: boolean = await loginFn(loginData);
-        if (!res) {
-            alert("Wrong credentials");
-        } else {
-            alert("Login Successed")
+        try {
+          const res: boolean = await loginFn(loginData);
+          if (!res) {
+              alert("Wrong credentials");
+          } else {
+              alert("Login Successed")
+          }
+        } catch (err) {
+          alert("server is not available!");
         }
     }
 
@@ -55,7 +59,6 @@ const LoginForm: FC<LoginFormProps> = (props) => {
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
-              marginTop: 8,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',

@@ -1,8 +1,7 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { RouteType } from '../../models/common/route-type'
 import NavigatorDrawer from './navigator-mobile'
-import NavigatorMobile from './navigator-mobile_appbar'
 import NavigatorWeb from './navigator-web'
 
 const NavigatorResposive: FC<{ items: RouteType[] }> = (props) => {

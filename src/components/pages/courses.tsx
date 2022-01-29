@@ -1,29 +1,17 @@
-import { Box, Paper, styled, useTheme } from "@mui/material";
-import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Paper, styled } from "@mui/material";
+import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import CoursesContext from "../../store/context";
-import { Delete, ThirtyFpsSharp } from "@mui/icons-material"
+import { Delete } from "@mui/icons-material"
 import { UserData } from "../../models/common/user-data";
-import { DataGrid, GridActionsCellItem, GridCallbackDetails, GridCellEditCommitParams, GridColDef, GridRowId, GridRowParams, GridRowsProp } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridCellEditCommitParams, GridColDef, GridRowId, GridRowParams, GridRowsProp, GridValueFormatterParams } from "@mui/x-data-grid";
 import Course from "../../models/course";
 import DialogConfirm from "../common/dialog";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ModalInfo from "../common/modal-info";
 import { useMediaQuery } from "react-responsive";
-// import mediaQuery from "../../config/media-query"
+import { CourseFields, getCoursesFields } from "../../config/media-query"
 import courseData from "../../config/courseData.json"
-import { createRandomCourse } from "../../util/random-courses";
 import { ConfirmationData, emptyConfirmationData } from "../../models/common/confirmation-type";
-
-
-function getRows(courses: Course[]): GridRowsProp {
-  return courses.map(course => course);
-}
-
-type UpdateType = {
-  old: Course;
-  new: Course;
-}
-const initUpdateType = {old: createRandomCourse(), new: createRandomCourse()};
 
 const StyledBox = styled(Box)(({ theme }) => ({
   height: '100%',
@@ -42,34 +30,43 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 export const Courses: FC = () => {
-  const [currentMedia, setcurrentMedia] = useState("");
+  /* context */
   const storeValue = useContext(CoursesContext);
+  /* dialog confirmation */
   const confirmationData = useRef<ConfirmationData>(emptyConfirmationData);
-
   const [dialogVisible, setdialogVisible] = useState(false);
-  const [dialogUpdate, setDialogUpdate] = useState(false);
-  const courseUpdate = useRef<UpdateType>(initUpdateType);
-  const currentCourses = useRef<Course[]>(storeValue.courses);
-  const [modalVisible, setModalVisible] = useState(false);
+  /* dialog modal */
   const textModal = useRef<string[]>(['']);
-  const [idCourse, setIdCourse] = useState(-1);
-  const [colums, setColums] = useState<GridColDef[]>(getColums(storeValue.userData));
-  const rows = useMemo(() => getRows(storeValue.courses), [storeValue, dialogUpdate]);
-  useEffect(() => setColums(getColums(storeValue.userData)), [storeValue, currentMedia]);
+  const [modalVisible, setModalVisible] = useState(false);
+  /* media-query */
+  const isMobile = useMediaQuery({ maxWidth: 600, orientation: 'portrait' });
+  const isLaptop = useMediaQuery({ maxWidth: 900 });
+  const mode = useMemo(() => getMode(), [isMobile, isLaptop]);
+  /* colums */
+  const [colums, setColums] = useState<GridColDef[]>([]);
+  const callbackMode = useCallback(() => 
+        setColums(getFilteredColumns(getCoursesFields().get(mode) as CourseFields[])), [storeValue, mode]);
+  /* rows */
+  const rows = useMemo(() => getRows(storeValue.courses), [storeValue, dialogVisible]);
 
+  useEffect(() => {
+    callbackMode();
+  }, [callbackMode])
 
-  useMediaQuery({ minWidth: 1100 }, undefined, () => setcurrentMedia("desktop"));
-  useMediaQuery({ minWidth: 600 }, undefined, () => setcurrentMedia("laptop"));
-  useMediaQuery({ minWidth: 480 }, undefined, () => setcurrentMedia("mobile"));
-
-
-  function openDialog(id: GridRowId) {
-    setIdCourse(+id);
-    setdialogVisible(true);
+  function getMode(): string {
+    if (isMobile) {
+      return 'isMobile';
+    }
+    if (isLaptop) {
+      return 'isLaptop'
+    }
+    return 'isDesktop';
   }
-
+  function getFilteredColumns(fields: CourseFields[]): any[] {
+    return getColums(storeValue.userData).filter(column => fields.includes(column.field as any));
+  }
   function getColums(userData: UserData): any[] {
-    const col: any[] = [
+    return [
       {
         field: "courseName", headerName: "Course Name", flex: 150, align: 'center', headerAlign: 'center'
       },
@@ -97,6 +94,9 @@ export const Courses: FC = () => {
           const cost = +params.props.value
           const hasError = cost < courseData.minCost || cost > courseData.maxCost;
           return { ...params.props, error: hasError };
+        },
+        valueFormatter: (params: GridValueFormatterParams) => {
+          return `${params.value} \u20AA`;
         }
       },
       {
@@ -115,7 +115,7 @@ export const Courses: FC = () => {
             <GridActionsCellItem
               icon={<Delete />}
               label="Delete"
-              onClick={() => openDialog(params.id)}
+              onClick={() => onRemove(params.id)}
             />
           ];
           const userAct = [
@@ -129,85 +129,80 @@ export const Courses: FC = () => {
         }
       }
     ];
-
-    switch (currentMedia) {
-      case "mobile":
-        return col.filter(e => e.field === "courseName" || e.field === "lecturerName");
-      case "laptop":
-        return col.filter(e => e.field === "courseName" || e.field === "lecturerName" || e.field === "openDate");
-      case "desktop":
-        return col;
-      default:
-        return col;
-    }
   }
-
-  function handleRemove(status: boolean): void {
+  function getRows(courses: Course[]): GridRowsProp {
+    return courses.map(course => course);
+  }
+  function findCourseById(id: number): Course | undefined {
+    return storeValue.courses.find(e => e.id === id);
+  }
+  function getInfo(course: Course): string[] {
+    const res: string[] = [
+        `Course ID  : ${course.id}`,
+        `Course Name: ${course.courseName}`,
+        `Lecturer   : ${course.lecturerName}`,
+        `Hours      : ${course.hours}`,
+        `Cost : ${course.cost}`,
+        `Openning Date : ${course.openDate.toLocaleDateString()}`,
+        `Course Type : ${course.type}`,
+        `Timing  : ${course.dayEvening.join(';')}`
+    ];
+    return res;
+}
+  
+  /* Handle */
+  function handleRemove(id: number, status: boolean): void {
     if (status) {
-      storeValue.removeFn!(idCourse);
+      storeValue.removeFn(id);
     }
     setdialogVisible(false);
   }
-
-  function handleUpdateBind(course:Course, status: boolean): void {
+  function handleUpdate(course: Course, status: boolean): void {
     if (status) {
-      storeValue.updateFn(courseUpdate.current.old.id, courseUpdate.current.new);
-    } 
-    setDialogUpdate(false);
+      storeValue.updateFn(course.id, course);
+    }
+    setdialogVisible(false);
   }
-  function handleUpdate(status: boolean): void {
-    if (status) {
-      storeValue.updateFn(courseUpdate.current.old.id, courseUpdate.current.new);
-    } 
-    setDialogUpdate(false);
-  }
-
   function showDetails(id: GridRowId) {
     const course = storeValue.courses.find(e => e.id === +id);
     if (!!course) {
-      const { courseName, lecturerName, hours, cost, type, dayEvening, openDate } = { ...course };
-      textModal.current = (`Course Name: ${courseName}_Lecturer: ${lecturerName}_Amount hours: ${hours}_Amount cost: ${cost}_Type course: ${type}_Times of Day: ${dayEvening}_Date start: ${openDate.toISOString().substring(0, 10)}`)
-        .split('_');
+      textModal.current = getInfo(course);
     } else {
       textModal.current = ["Not found"];
     }
     setModalVisible(true);
   }
-
   function onEdit(params: GridCellEditCommitParams) {
     const id: number = +params.id;
     const oldCourse = findCourseById(id);
-    const newCourse = {...oldCourse, [params.field]:params.value};
-    if(oldCourse !== newCourse) {
-      confirmationData.current.message = `Do you want update course ID ${oldCourse?.id} old value ${(oldCourse as any)[params.field]} new value ${params.value}`;
+    const newCourse = { ...oldCourse, [params.field]: params.value };
+    if (oldCourse !== newCourse) {
       confirmationData.current.title = `update course`;
-      confirmationData.current.handle = handleUpdateBind.bind(undefined, newCourse as Course);
-      setDialogUpdate(true);
+      confirmationData.current.message = `Do you want update course ID ${oldCourse?.id} old value ${(oldCourse as any)[params.field]} new value ${params.value}`;
+      confirmationData.current.handle = handleUpdate.bind(undefined, newCourse as Course);
+      setdialogVisible(true);
     }
-    
-    
-
-    currentCourses.current = storeValue.courses;
-    courseUpdate.current.old = storeValue.courses.find(e => e.id === +params.id) as Course;
-    courseUpdate.current.new = { ...courseUpdate.current.old };
-    (courseUpdate.current.new as any)[params.field] = params.value;
-    setDialogUpdate(true);
   }
-
-  function findCourseById(id:number): Course | undefined {
-    return storeValue.courses.find(e => e.id === id);
+  function onRemove(id: GridRowId) {
+    const course = findCourseById(+id);
+    if (!!course) {
+      confirmationData.current.title = `remove course`;
+      confirmationData.current.message = `Do you want remove course ID ${course?.id}`;
+      confirmationData.current.handle = handleRemove.bind(undefined, +id);
+      setdialogVisible(true);
+    }
   }
 
   return <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <Paper sx={{ width: '80vw', height: '80vh' }}>
+    <Paper sx={{ width: { xs: '100vw', sm: '80vw' }, height: '80vh', marginTop: '2vh' }}>
       <StyledBox>
         <DataGrid columns={colums} rows={rows} onCellEditCommit={onEdit} />
       </StyledBox>
 
     </Paper>
     <ModalInfo title={"Detailed information about the courses"} message={textModal.current} visible={modalVisible} callBack={() => setModalVisible(false)} />
-    <DialogConfirm visible={dialogUpdate} title={"Update course"} message={`are you want to update course with ID  ${courseUpdate.current.old.id}?`} onClose={handleUpdate} />
-    <DialogConfirm visible={dialogVisible} title={"Course remove"} message={`are you want to remove course with ID ${idCourse}`} onClose={handleRemove} />
+    <DialogConfirm visible={dialogVisible} title={confirmationData.current.title} message={confirmationData.current.message} onClose={confirmationData.current.handle} />
+
   </Box>
 }
 

@@ -15,34 +15,32 @@ export default class AuthServiceJWT implements AuthService {
             this.cashe = JSON.stringify(userData);
             subscribe.next(userData);
             setInterval(() => {
-                try {
                     userData = fetchUserData();
                     const userDataJSON = JSON.stringify(userData);
                     if (userDataJSON !== this.cashe) {
                         this.cashe = userDataJSON;
                         subscribe.next(userData);
                     }
-                } catch (err) {
-                    console.log("err in auth");
-                }
             }, pollingInterval);
         });
     }
     async login(loginData: LoginData): Promise<boolean> {
         let res = false;
-        const response = await fetch(`${this.url}/login`, {
-            method: "POST",
-            headers: {
-                'Content-Type': "application/json"
-            },
-            body: JSON.stringify(loginData)
-        });
-        if (response.ok) {
-            const token = await response.json();
-            localStorage.setItem(AUTH_TOKEN, token.accessToken);
-            res = true;
-        }
-        return Promise.resolve(res);
+            const response = await fetch(`${this.url}/login`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(loginData)
+            });
+            
+            if (response.ok) {
+                const token = await response.json();
+                localStorage.setItem(AUTH_TOKEN, token.accessToken);
+                res = true;
+            }
+        
+        return res ? Promise.resolve(res): Promise.reject(res);
     }
     logout(): Promise<boolean> {
         localStorage.removeItem(AUTH_TOKEN);

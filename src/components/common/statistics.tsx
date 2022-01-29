@@ -23,8 +23,6 @@ const Statistics: FC<StatisticsProps> = (props) => {
     const [interval, setInterval] = useState<number>(intervals[0]);
     const rows = useMemo(() => getRows(), [data, interval]);
     function getRows(): GridRowsProp {
-        console.log("rows running");
-        console.log(data)
         const res = getStatistics(data, interval, field);
         return res.map((e, i) => ({
             id: i, ...e

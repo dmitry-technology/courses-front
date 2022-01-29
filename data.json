@@ -1,72 +1,6 @@
 {
   "courses": [
     {
-      "id": 1381992177529,
-      "courseName": "Java Technologies",
-      "lecturerName": "Ahser",
-      "hours": 253,
-      "cost": 12344,
-      "type": "QA",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2020-05-15T21:00:00.000Z",
-      "userId": 1
-    },
-    {
-      "id": 1478602904518,
-      "courseName": "HTML",
-      "lecturerName": "Ahser",
-      "hours": 361,
-      "cost": 15000,
-      "type": "Programming",
-      "dayEvening": [
-        "day",
-        "evening"
-      ],
-      "openDate": "2023-02-24T22:00:00.000Z",
-      "userId": 1
-    },
-    {
-      "id": 151500198170,
-      "courseName": "QA automation",
-      "lecturerName": "Naftaly",
-      "hours": 280,
-      "cost": 7343,
-      "type": "QA",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2016-12-25T12:14:52.532Z",
-      "userId": 1
-    },
-    {
-      "id": 44656799664,
-      "courseName": "QA automation",
-      "lecturerName": "Yosef",
-      "hours": 757,
-      "cost": 10228,
-      "type": "Programming",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2021-12-08T06:09:04.414Z",
-      "userId": 1
-    },
-    {
-      "id": 306909510509,
-      "courseName": "CSS",
-      "lecturerName": "Yackob",
-      "hours": 444,
-      "cost": 15449,
-      "type": "QA",
-      "dayEvening": [
-        "day"
-      ],
-      "openDate": "2015-12-05T20:04:17.409Z",
-      "userId": 1
-    },
-    {
       "id": 1041784830772,
       "courseName": "CSS",
       "lecturerName": "Naftaly",
@@ -80,24 +14,11 @@
       "userId": 1
     },
     {
-      "id": 1069955420459,
-      "courseName": "Java Technologies",
-      "lecturerName": "Yosef",
-      "hours": 406,
-      "cost": 12378,
-      "type": "Programming",
-      "dayEvening": [
-        "day"
-      ],
-      "openDate": "2021-09-26T23:04:29.370Z",
-      "userId": 1
-    },
-    {
       "id": 716117012654,
       "courseName": "Java Core",
       "lecturerName": "Naftaly",
       "hours": 307,
-      "cost": 10903,
+      "cost": 11111,
       "type": "QA",
       "dayEvening": [
         "day",
@@ -135,7 +56,7 @@
     {
       "id": 1011713680963,
       "courseName": "React",
-      "lecturerName": "Yosef",
+      "lecturerName": "Moses",
       "hours": 149,
       "cost": 9943,
       "type": "Programming",
@@ -5220,6 +5141,150 @@
         "evening"
       ],
       "openDate": "2022-04-30T15:32:46.420Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050202,
+      "courseName": "HTML",
+      "lecturerName": "Abraham",
+      "hours": "100",
+      "cost": "5000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2022-01-28T11:56:37.519Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050203,
+      "courseName": "Java Core",
+      "lecturerName": "Yackob",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2022-01-28T11:58:03.472Z",
+      "userId": 1
+    },
+    {
+      "id": 483773031139,
+      "courseName": "QA automation",
+      "lecturerName": "Naftaly",
+      "hours": 718,
+      "cost": 8034,
+      "type": "QA",
+      "dayEvening": [
+        "day",
+        "evening"
+      ],
+      "openDate": "2020-02-10T05:31:33.766Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050204,
+      "courseName": "JS",
+      "lecturerName": "Abraham",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "evening"
+      ],
+      "openDate": "2022-01-28T17:26:47.912Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050205,
+      "courseName": "HTML",
+      "lecturerName": "Yosef",
+      "hours": "123",
+      "cost": "12341",
+      "type": "Programming",
+      "dayEvening": [
+        "evening"
+      ],
+      "openDate": "2022-01-11T00:00:00.000Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050206,
+      "courseName": "HTML",
+      "lecturerName": "Yosef",
+      "hours": "500",
+      "cost": "15000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2021-01-12T00:00:00.000Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050207,
+      "courseName": "JS",
+      "lecturerName": "Yosef",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2015-01-05T22:00:00.000Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050208,
+      "courseName": "Java Core",
+      "lecturerName": "Abraham",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "evening"
+      ],
+      "openDate": "2020-10-09T21:00:00.000Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050209,
+      "courseName": "JS",
+      "lecturerName": "Yackob",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2020-10-09T21:00:00.000Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050210,
+      "courseName": "JS",
+      "lecturerName": "Abraham",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2020-10-09T21:00:00.000Z",
+      "userId": 1
+    },
+    {
+      "id": 1640734050211,
+      "courseName": "Java Core",
+      "lecturerName": "Yackob",
+      "hours": "500",
+      "cost": "10000",
+      "type": "Programming",
+      "dayEvening": [
+        "day"
+      ],
+      "openDate": "2020-10-09T21:00:00.000Z",
       "userId": 1
     }
   ],

@@ -1,8 +1,34 @@
 import Course from "../models/course";
 import CoursesService from "./courses-service";
 import { Observable, from } from 'rxjs'
+import ErrorCode from "../models/common/error-code"
 const DELAY: number = 2000;
 export const AUTH_TOKEN = "auth_token";
+
+async function gerResponse(url: string, init?: RequestInit): Promise<Response> {
+    let flInnerCatch = false;
+    try {
+        const response = await fetch(url, init);
+        if (response.status < 400 || response.status == 404) {
+            return response;
+        }
+        const err = response.status == 401 || response.status == 403 ? 
+        ErrorCode.AUTH_ERROR : ErrorCode.SERVER_UNAVAILABLE;
+        flInnerCatch = true;
+        throw err;
+    } catch (err) {
+        if(flInnerCatch) {
+            throw err;
+        } else {
+            throw ErrorCode.SERVER_UNAVAILABLE;
+        }
+    }
+}
+
+async function requestRest(url: string, init?: RequestInit): Promise<Response> {
+    const response = await gerResponse(url, init);
+    return response.json();
+}
 
 function getHeaders(): { Authorization: string, "Content-Type": string } {
     return {
@@ -12,7 +38,7 @@ function getHeaders(): { Authorization: string, "Content-Type": string } {
 }
 
 export default class CoursesServiceRest implements CoursesService {
-    private currentResponse = "";
+    private cache = "";
     constructor(private url: string) { }
     async add(course: Course): Promise<Course> {
         try {
@@ -53,21 +79,20 @@ export default class CoursesServiceRest implements CoursesService {
     }
 
     private getObservable(): Observable<Course[]> {
+        this.cache = '';
         return new Observable<Course[]>(observer => {
             const interval = setInterval(async () => {
                 try {
                     if (!!localStorage.getItem(AUTH_TOKEN)) {
                         const courses: Course[] = await this.fetchGet(this.url);
                         const getResponce: string = JSON.stringify(courses);
-                        if (this.currentResponse !== getResponce) {
-                            this.currentResponse = getResponce;
+                        if (this.cache !== getResponce) {
+                            this.cache = getResponce;
                             observer.next(courses);
                         }
                     }
                 } catch (err) {
-                    console.log("error in get");
-                    
-                    this.currentResponse = "";
+                    this.cache = "";
                     observer.error(err);
                     clearInterval(interval);
                 }

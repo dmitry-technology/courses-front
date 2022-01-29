@@ -6,4 +6,5 @@ export type RouteType = {
     label: string;
     authenticated?: boolean;
     adminOnly?: boolean;
+    icon: ReactNode
 }

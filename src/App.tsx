@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs'
 import { UserData } from './models/common/user-data';
 import { RouteType } from './models/common/route-type';
 import { Alert, AlertTitle, Box, CircularProgress, LinearProgress } from '@mui/material';
+import BreadcrumbsCastom from './components/common/breadcrumbs';
 
 function getRelevantRoutes(userData: UserData): RouteType[] {
   let resRoutes = routes;
@@ -27,11 +28,8 @@ const App: FC = () => {
   const [coursesState, setcoursesState] = useState<StoreType>(initialCourses);
   const [availabilityServer, setAvailabilityServer] = useState(true);
   const [relevantRoutes, setRelevantRoutes] = useState<RouteType[]>(routes);
-  const reset = useRef(false);
   useEffect(() => {
-    setRelevantRoutes(getRelevantRoutes(coursesState.userData));
-    console.log("set relevant routs");
-    
+    setRelevantRoutes(getRelevantRoutes(coursesState.userData));   
   }, [coursesState.userData])
 
 
@@ -41,15 +39,12 @@ const App: FC = () => {
     function getUserData(): Subscription {
       return authService.getUserData().subscribe({
         next(ud: UserData) {
-          console.log(ud);
-          if(!ud.userName){
-            setAvailabilityServer(true);
-          }
+          setAvailabilityServer(true);
           coursesState.userData = ud;
           setcoursesState({ ...coursesState });
         },
         error(err: any): void {
-          console.log("err get user data " + err);
+          console.log("auth:" + err);
         }
       });
     }
@@ -59,16 +54,17 @@ const App: FC = () => {
   }, []);
 
   useEffect(() => {
-    let subscription = getData();
+    let subscription:any;
+    subscription = getData();
     function getData(): Subscription {
+      subscription && subscription.unsubscribe();
       return college.getAllCourses().subscribe({
         next(arr: Course[]) {
           setAvailabilityServer(true);
           coursesState.courses = arr;
           setcoursesState({ ...coursesState });
         },
-        error(err: any): void {
-          
+        error(err: any): void {     
           setAvailabilityServer(false);
           coursesState.courses = []
           setcoursesState({ ...coursesState })
@@ -81,19 +77,24 @@ const App: FC = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  function handleAlert(params:any) {
+    // setAvailabilityServer(true);
+  }
   
 
   function getRoutes(): ReactNode[] {
     return relevantRoutes
       .map((e) => <Route key={e.path} path={e.path} element={e.element} />);
   }
-  return (<Box>
+  return (<Box sx={
+      { display: "flex", flexDirection: "column", alignItems: {sx:"left", md: "center" } , justifyContent: "space-between", width: "100vw", height: "100vh" }
+     }>
     {(!availabilityServer) ?
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100vw", height: "100vh" }}>
-        <CircularProgress />
-        <Alert sx={{ width: "200px" }} severity="error">
+        <Alert sx={{ width: "200px" }} severity="error" onClick={handleAlert}>
           <AlertTitle>Error</AlertTitle>
           <strong>server is not available!</strong>
+          <LinearProgress />
         </Alert>
       </Box>
       :
@@ -103,8 +104,13 @@ const App: FC = () => {
           <Routes>{getRoutes()}
             <Route path='*' element={<Navigate to={relevantRoutes[0].path} />}></Route>
           </Routes>
+          <BreadcrumbsCastom  items={relevantRoutes} />
+
         </BrowserRouter>
-      </CoursesContext.Provider>}
+
+      </CoursesContext.Provider>
+
+      }
   </Box>
   );
 

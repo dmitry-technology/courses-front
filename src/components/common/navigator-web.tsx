@@ -1,7 +1,9 @@
-import { Tabs, Tab } from '@mui/material'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import { Tabs, Tab, BottomNavigation, Box } from '@mui/material'
+import { FC, ReactNode, useEffect, useState } from 'react'
 import { RouteType } from '../../models/common/route-type'
 import {Link, useLocation} from 'react-router-dom'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+
 
 const NavigatorWeb:FC<{items: RouteType[]}> = (props) => {
     const location = useLocation();
@@ -9,18 +11,24 @@ const NavigatorWeb:FC<{items: RouteType[]}> = (props) => {
     
     useEffect(() => {
         setActiveTab(getInitialActiveTabIndex(location.pathname, props.items));
-    }, [props.items])
+    }, [props.items, location])
     
-    function getTabs():ReactNode[]{
-        return props.items.map(item => <Tab sx={{backgroundColor: 'black' , color: 'white'}} key={item.label} component={Link} to={item.path} label= {item.label}/>)
+    function getElements():ReactNode[] {
+        return props.items.map(item => 
+            <BottomNavigationAction  key={item.label} component={Link} to={item.path} label= {item.label} icon={item.icon} />)
     }
     function onChangeHandler(event:any){
         setActiveTab(event.target.value);
     }
-    return (
-        <Tabs value={activeTabIndex >= props.items.length ? 0 : activeTabIndex} onChange={onChangeHandler} variant="fullWidth">
-            {getTabs()}
-        </Tabs>
+    return (<Box sx={{ width: '100vw' }}>
+        <BottomNavigation
+          showLabels
+          value={activeTabIndex >= props.items.length ? 0 : activeTabIndex}
+          onChange={onChangeHandler}
+        >  
+           {getElements()}
+        </BottomNavigation>
+      </Box>
     )
 }
 

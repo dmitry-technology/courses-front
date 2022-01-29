@@ -1,9 +1,11 @@
-import { AppBar, Box, Container, Drawer, IconButton, Tab, Tabs, Toolbar, Typography } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { AppBar, BottomNavigation, Box, Container, Drawer, IconButton, Tab, Tabs, Toolbar, Typography } from '@mui/material';
+import { FC, useEffect, useState, ReactNode } from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { RouteType } from '../../models/common/route-type';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+
 
 
 function getActiveLabel(path: string, items: RouteType[]): string {
@@ -30,7 +32,7 @@ const NavigatorDrawer: FC<{ items: RouteType[] }> = ({ items }) => {
     useEffect(() => {
         setActiveTab(getInitialActiveTabIndex(path, items));
         setLabel(getActiveLabel(path, items));
-    }, [items])
+    }, [items, path])
 
     document.title = label;
 
@@ -44,70 +46,49 @@ const NavigatorDrawer: FC<{ items: RouteType[] }> = ({ items }) => {
         setStateDrawer(false);
     }
 
-    function onChangeHandler(event: React.SyntheticEvent, newValue: number) {
-        setActiveTab(newValue);
+    function getElements(): ReactNode[] {
+        return items.map(item =>
+            <BottomNavigationAction key={item.label} component={Link} to={item.path} label={item.label} icon={item.icon} 
+            sx={{display: 'flex', flexDirection: 'row', justifyContent: 'start' }}
+            />)
     }
 
-    const getTabs = (orientation: "vertical" | "horizontal") => (
-        <Tabs
-            orientation={orientation}
-            variant="scrollable"
-            value={activeTabIndex >= items.length ? 0 : activeTabIndex}
-            onChange={onChangeHandler}
-        >
-            {items.map((item, index) => (
-                <Tab
-                    key={item.label}
-                    component={Link}
-                    to={item.path}
-                    label={item.label}
-                    onClick={() => setLabel(item.label)}
-                />
-            ))}
-        </Tabs>
-    );
+    function onChangeHandler(event: React.SyntheticEvent, newValue: number) {
+        setActiveTab(newValue);
+        setStateDrawer(false);
+    }
 
     return (
-        <Toolbar disableGutters sx={{backgroundColor: 'black' , color: 'white'}}>
-            <Box>
-                <Toolbar>
-                    <IconButton
-                        onClick={showDrawer}
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2, flexGrow: '1' }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                </Toolbar>
-                <Drawer
-                    anchor='left'
-                    open={displayDrawer}
-                    onClose={closeDrawer}
-                >
-                    <Box
-                        sx={{ width: 250 }}
-                        role="presentation"
-                        onClick={closeDrawer}
-                        aria-label="Mobile menu"
-                    >
-                        {getTabs('vertical')}
-                    </Box>
-                </Drawer>
-            </Box>
-            <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{
-                    textAlign: 'left',
-                    flexGrow: '1'
-                }}
+        <Box>
+            <Toolbar sx={{ display: 'flex', orientation: 'horizontal' }}
             >
-                {label}
-            </Typography>
-        </Toolbar>
+                <IconButton
+                    onClick={showDrawer}
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                >
+                    <MenuIcon sx={{ fontSize: 30 }} />
+                </IconButton>
+                <Typography variant="body1" component="h2">
+                    {label}
+                </Typography>
+            </Toolbar>
+            <Drawer
+                anchor='left'
+                open={displayDrawer}
+                onClose={closeDrawer}
+            >
+                <BottomNavigation
+                    sx={{ width: 250, display: 'flex', flexDirection: 'column', justifyContent: 'start' }}
+                    onChange={onChangeHandler}
+                    showLabels
+                    value={activeTabIndex >= items.length ? 0 : activeTabIndex}
+                >
+                    {getElements()}
+                </BottomNavigation>
+            </Drawer>
+        </Box>
     );
 };
 
