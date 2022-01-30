@@ -2,22 +2,22 @@ import Course from "../models/course";
 import CoursesService from "./courses-service";
 import { Observable, from } from 'rxjs'
 import ErrorCode from "../models/common/error-code"
-const DELAY: number = 2000;
+const pollingInterval: number = 2000;
 export const AUTH_TOKEN = "auth_token";
 
-async function gerResponse(url: string, init?: RequestInit): Promise<Response> {
+async function getResponse(url: string, init?: RequestInit): Promise<Response> {
     let flInnerCatch = false;
     try {
         const response = await fetch(url, init);
         if (response.status < 400 || response.status == 404) {
             return response;
         }
-        const err = response.status == 401 || response.status == 403 ? 
-        ErrorCode.AUTH_ERROR : ErrorCode.SERVER_UNAVAILABLE;
+        const err = response.status == 401 || response.status == 403 ?
+            ErrorCode.AUTH_ERROR : ErrorCode.SERVER_UNAVAILABLE;
         flInnerCatch = true;
         throw err;
     } catch (err) {
-        if(flInnerCatch) {
+        if (flInnerCatch) {
             throw err;
         } else {
             throw ErrorCode.SERVER_UNAVAILABLE;
@@ -25,9 +25,9 @@ async function gerResponse(url: string, init?: RequestInit): Promise<Response> {
     }
 }
 
-async function requestRest(url: string, init?: RequestInit): Promise<Response> {
-    const response = await gerResponse(url, init);
-    return response.json();
+async function requestRest(url: string, init?: RequestInit): Promise<any> {
+    const response = await getResponse(url, init);
+    return await response.json();
 }
 
 function getHeaders(): { Authorization: string, "Content-Type": string } {
@@ -40,38 +40,29 @@ function getHeaders(): { Authorization: string, "Content-Type": string } {
 export default class CoursesServiceRest implements CoursesService {
     private cache = "";
     constructor(private url: string) { }
-    async add(course: Course): Promise<Course> {
-        try {
-            (course as any).userId = 1;
-            const response = await fetch(this.url, {
-                method: "POST",
-                headers: getHeaders(),
-                body: JSON.stringify(course)
-            });
-            return await response.json();
-        } catch (err) {
-            console.log("server is not available!!!");
-            throw "server is not available";
-        }
+       add(course: Course): Promise<Course> {
+        (course as any).userId = 1;
+        return requestRest(this.url, {
+            method: "POST",
+            headers: getHeaders(),
+            body: JSON.stringify(course)
+        })
     }
+
     async remove(id: number): Promise<Course> {
         const oldCourse = await this.get(id);
-        await fetch(this.getUrlId(id),
-            {
-                method: "DELETE",
-                headers: getHeaders()
-            });
+        await requestRest(this.getUrlId(id), {
+            method: "DELETE",
+            headers: getHeaders()
+        })
         return oldCourse as Course;
     }
+
     async exists(id: number): Promise<boolean> {
-        try {
-            const response = await fetch(this.getUrlId(id), {
-                headers: getHeaders()
-            });
-            return response.ok;
-        } catch (err) {
-            throw "server is not available";
-        }
+        const response = await getResponse(this.getUrlId(id),{
+            headers: getHeaders(),
+        } );
+        return response.ok;
     }
 
     get(id?: number): Observable<Course[]> | Promise<Course> {
@@ -94,24 +85,16 @@ export default class CoursesServiceRest implements CoursesService {
                 } catch (err) {
                     this.cache = "";
                     observer.error(err);
-                    clearInterval(interval);
                 }
-            }, DELAY);
+            }, pollingInterval);
             return () => clearInterval(interval);
         })
     }
 
     private async fetchGet(url: string): Promise<any> {
-
-        const r = await fetch(url, {
+        return  requestRest(url, {
             headers: getHeaders()
-        });
-        if (r.status === 401 || r.status === 403) {
-            localStorage.setItem(AUTH_TOKEN, '');
-            throw Error(`${r.status}`);
-        }
-        return await r.json();
-
+        }); 
     }
 
     private getUrlId(id: number) {
@@ -120,7 +103,7 @@ export default class CoursesServiceRest implements CoursesService {
 
     async update(id: number, newCourse: Course): Promise<Course> {
         const oldCourse = await this.get(id);
-        const response = await fetch(this.getUrlId(id), {
+        await fetch(this.getUrlId(id), {
             method: "PUT",
             headers: getHeaders(),
             body: JSON.stringify(newCourse)
