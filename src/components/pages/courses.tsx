@@ -153,13 +153,13 @@ export const Courses: FC = () => {
   /* Handle */
   function handleRemove(id: number, status: boolean): void {
     if (status) {
-      storeValue.removeFn(id);
+      storeValue.removeFn!(id);
     }
     setdialogVisible(false);
   }
   function handleUpdate(course: Course, status: boolean): void {
     if (status) {
-      storeValue.updateFn(course.id, course);
+      storeValue.updateFn!(course.id, course);
     }
     setdialogVisible(false);
   }

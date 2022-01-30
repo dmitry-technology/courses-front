@@ -1,5 +1,5 @@
 import { LoginData } from "../models/common/login-data";
-import { nonAuthorizedUser, UserData } from "../models/common/user-data";
+import { nonAuthorizedUser, UserData, unavailableServiceUser } from "../models/common/user-data";
 import { Observable } from "rxjs"
 import { AUTH_TOKEN } from "./courses-sevice-rest";
 import { Buffer } from "buffer";
@@ -8,24 +8,35 @@ const pollingInterval = 2000;
 
 export default class AuthServiceJWT implements AuthService {
     private cashe = '';
+    private flUnavailability = false;
     constructor(private url: string) { }
+    private fetchUserData(): UserData {
+        const token: string | null = localStorage.getItem(AUTH_TOKEN);
+        if (this.flUnavailability) {
+            this.flUnavailability = false;
+            return unavailableServiceUser;
+        }
+        return !token ? nonAuthorizedUser : tokenToUserData(token);
+    }
+
     getUserData(): Observable<UserData> {
         return new Observable<UserData>(subscribe => {
-            let userData = fetchUserData();
+            let userData: UserData = this.fetchUserData();
             this.cashe = JSON.stringify(userData);
             subscribe.next(userData);
             setInterval(() => {
-                    userData = fetchUserData();
-                    const userDataJSON = JSON.stringify(userData);
-                    if (userDataJSON !== this.cashe) {
-                        this.cashe = userDataJSON;
-                        subscribe.next(userData);
-                    }
+                userData = this.fetchUserData();
+                const userDataJSON = JSON.stringify(userData);
+                if (userDataJSON !== this.cashe) {
+                    this.cashe = userDataJSON;
+                    subscribe.next(userData);
+                }
             }, pollingInterval);
         });
     }
     async login(loginData: LoginData): Promise<boolean> {
         let res = false;
+        try {
             const response = await fetch(`${this.url}/login`, {
                 method: "POST",
                 headers: {
@@ -33,14 +44,17 @@ export default class AuthServiceJWT implements AuthService {
                 },
                 body: JSON.stringify(loginData)
             });
-            
             if (response.ok) {
                 const token = await response.json();
                 localStorage.setItem(AUTH_TOKEN, token.accessToken);
                 res = true;
             }
-        
-        return res ? Promise.resolve(res): Promise.reject(res);
+            return res;
+        } catch (err) {
+            this.flUnavailability = true;
+            localStorage.setItem(AUTH_TOKEN, 'xxx'); //only for activating poller after service availability
+            return false;
+        }
     }
     logout(): Promise<boolean> {
         localStorage.removeItem(AUTH_TOKEN);
@@ -49,11 +63,7 @@ export default class AuthServiceJWT implements AuthService {
 
 }
 
-function fetchUserData(): UserData {
-    const token: string | null = localStorage.getItem(AUTH_TOKEN);
 
-    return !token ? nonAuthorizedUser : tokenToUserData(token);
-}
 function tokenToUserData(token: string): UserData {
     let resUserData = nonAuthorizedUser;
     const rawPayload = token.split('.')[1]; //JSON in Base64
