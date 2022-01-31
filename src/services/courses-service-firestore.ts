@@ -15,8 +15,8 @@ export default class CoursesServiceFire implements CoursesService {
     }
     async add(course: Course): Promise<Course> {
         const id = await this.getRandomID();
-        course = { ...course, id };
-        await setDoc(doc(this.fireCollection, id.toString()), course);
+        course = { ...course, id};
+        await this.setCourse(id, course);
         return course;
     }
     async remove(id: number): Promise<Course> {
@@ -39,7 +39,7 @@ export default class CoursesServiceFire implements CoursesService {
     }
     async update(id: number, newCourse: Course): Promise<Course> {
         const course = await this.get(id);
-        await setDoc(doc(this.fireCollection, id.toString()), newCourse);
+        await this.setCourse(id, newCourse);
         return course as Course;
     }
     private async getRandomID(): Promise<number> {
@@ -49,6 +49,15 @@ export default class CoursesServiceFire implements CoursesService {
         } while (await this.exists(res));
         return res;
     }
+    private async setCourse(id: number, course: Course) {
+        await setDoc(doc(this.fireCollection, id.toString()), convertCourse(course));
+    }
 }
+
+function convertCourse(course: Course):any{
+    return { ...course, openDate: course.openDate.toISOString() }
+}
+
+
 
 
