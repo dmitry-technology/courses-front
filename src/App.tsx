@@ -37,22 +37,25 @@ const App: FC = () => {
       college.updateCourse(id, newCourse).catch(err => handleError(err));
   }, [])
 
+  useEffect(() => {
+    functionsInit();
+  }, [functionsInit])
+
   function handleError(code: ErrorCode) {
     if (code === ErrorCode.NO_ERROR) {
       setErrServer(false);
     } else if (code === ErrorCode.AUTH_ERROR) {
-      authService.logout();
+      if(!!coursesState.userData.userName){
+        authService.logout();
+      }
       setErrServer(false)
     } else {
       setErrServer(true);
     }
   }
 
-  useEffect(() => {
-    functionsInit();
-  }, [functionsInit])
-
   const [relevantRoutes, setRelevantRoutes] = useState<RouteType[]>(routes);
+
   useEffect(() => {
     setRelevantRoutes(getRelevantRoutes(coursesState.userData));
   }, [coursesState.userData])

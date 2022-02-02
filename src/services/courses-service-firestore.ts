@@ -1,13 +1,15 @@
 import CoursesService from "./courses-service";
 import appFire from "../config/fire-config";
 import { collection, getFirestore, doc, getDoc, setDoc, deleteDoc, CollectionReference } from 'firebase/firestore';
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { collectionData } from 'rxfire/firestore'
 import Course from '../models/course'
 import { getRandomInteger } from "../util/common/random";
+import { catchError } from "rxjs/operators";
+import ErrorCode from "../models/common/error-code";
 
 export default class CoursesServiceFire implements CoursesService {
-    
+
     fireCollection: CollectionReference;
     constructor(private collectionName: string, private minId: number, private maxId: number) {
         const db = getFirestore(appFire);
@@ -15,14 +17,18 @@ export default class CoursesServiceFire implements CoursesService {
     }
     async add(course: Course): Promise<Course> {
         const id = await this.getRandomID();
-        course = { ...course, id};
+        course = { ...course, id };
         await this.setCourse(id, course);
         return course;
     }
     async remove(id: number): Promise<Course> {
         const course = await this.get(id);
         const docRef = doc(this.fireCollection, id.toString());
-        await deleteDoc(docRef);
+        try {
+            await deleteDoc(docRef);
+        } catch (err) {
+            throw ErrorCode.AUTH_ERROR;
+        }
         return course as Course;
     }
     async exists(id: number): Promise<boolean> {
@@ -35,7 +41,11 @@ export default class CoursesServiceFire implements CoursesService {
             const docRef = doc(this.fireCollection, id.toString());
             return getDoc(docRef).then(docSnap => docSnap.data() as Course);
         }
-        return collectionData(this.fireCollection) as Observable<Course[]>;
+        return (collectionData(this.fireCollection) as Observable<Course[]>)
+            .pipe(catchError(err => {
+                // console.log(err);        
+                throw err.code ? ErrorCode.AUTH_ERROR : ErrorCode.SERVER_UNAVAILABLE}));
+
     }
     async update(id: number, newCourse: Course): Promise<Course> {
         const course = await this.get(id);
@@ -50,11 +60,15 @@ export default class CoursesServiceFire implements CoursesService {
         return res;
     }
     private async setCourse(id: number, course: Course) {
-        await setDoc(doc(this.fireCollection, id.toString()), convertCourse(course));
+        try {
+            await setDoc(doc(this.fireCollection, id.toString()), convertCourse(course));
+        } catch (err) {
+            throw ErrorCode.AUTH_ERROR;
+        }
     }
 }
 
-function convertCourse(course: Course):any{
+function convertCourse(course: Course): any {
     return { ...course, openDate: course.openDate.toISOString() }
 }
 
