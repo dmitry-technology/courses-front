@@ -13,8 +13,8 @@ export default class AuthServiceFake implements AuthService {
     login(loginData: LoginData): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
-    logout(): Promise<boolean> {
-        return Promise.resolve(true);
+    logout(): Promise<string> {
+        return Promise.resolve("true");
     }
 
 }
