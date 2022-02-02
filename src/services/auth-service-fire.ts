@@ -1,5 +1,5 @@
 import AuthService from "./auth-service";
-import { getAuth, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';  //state
+import { AuthProvider, FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, TwitterAuthProvider, User } from 'firebase/auth';  //state
 import { authState } from 'rxfire/auth';  //publisher state
 import { Observable, of, from } from "rxjs";      //publisher
 import { filter, map, mergeMap } from "rxjs/operators";     //map user to Userdate
@@ -30,16 +30,66 @@ export default class AuthServiceFire implements AuthService {
                             displayName: userFire.displayName || userFire.email as string
                         } : nonAuthorizedUser
                     ))
-                )}
+                )
+            }
             ));
     }
 
+    // async isAdmin(id?: string): Promise<boolean> {
+    //     if (!id) {
+    //         return false;
+    //     }
+
+    //     const docRef: DocumentReference = doc(this.collectionAuth, id);
+    //     const docSnap: DocumentSnapshot = await getDoc(docRef);
+
+    //     return docSnap.exists();
+    // }
+
+    // getUserData(): Observable<UserData> {
+    //     return authState(this.authFire)
+    //         .pipe ( mergeMap(user => from(this.isAdmin(user?.uid))
+    //             .pipe(map((isAdmin) => {
+    //                 if (!!user) {
+    //                     return {
+    //                         username: user.uid,
+    //                         displayName: user.displayName ?? user.email!,
+    //                         isAdmin: isAdmin
+    //                     };
+    //                 }
+
+    //                 return nonAuthorizedUser;
+    //             }))
+    //         ));
+    // }
+
     login(loginData: LoginData): Promise<boolean> {
-        return signInWithEmailAndPassword(this.authFire, loginData.email, loginData.password)
-            .then(() => true).catch(() => false);
+
+        if (!!loginData.password) {
+            return signInWithEmailAndPassword(this.authFire, loginData.email, loginData.password).then(() => true).catch(() => false);
+        } else {
+            let authProvider: any;
+            switch (loginData.email) {
+                case "google":
+                    authProvider = new GoogleAuthProvider();
+                    break;
+                case "twitter":
+                    authProvider = new TwitterAuthProvider();
+                    break;
+                case "facebook":
+                    authProvider = new FacebookAuthProvider();
+                    break;
+                default:
+                    console.log("error name provider");
+                    break;
+            }
+            return signInWithPopup(this.authFire, authProvider).then(() => true).catch(() => false);
+        }
     }
-    logout(): Promise<boolean> {
-        return signOut(this.authFire).then(() => true).catch(() => false);
+    logout(): Promise<string> {
+        
+        const name = this.authFire.currentUser!.displayName
+        return signOut(this.authFire).then(() => !!name ? name : "not auth").catch(() => !!name ? name : "not auth");
     }
 
 }

@@ -2,7 +2,7 @@ import { Box, Checkbox, Typography } from "@mui/material";
 import React, { FC, Fragment, useState } from "react";
 import { authService } from "../../config/servicesConfig";
 import { LoginData } from "../../models/common/login-data";
-import LoginForm from "../../models/common/login-form";
+import LoginForm from "../common/login-form";
 import courseData from "../../config/courseData.json"
 import { Navigate } from "react-router-dom";
 import { PATH_COURSES } from "../../config/routes-config";

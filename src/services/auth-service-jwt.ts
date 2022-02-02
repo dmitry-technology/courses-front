@@ -56,9 +56,9 @@ export default class AuthServiceJWT implements AuthService {
             return false;
         }
     }
-    logout(): Promise<boolean> {
+    logout(): Promise<string> {
         localStorage.removeItem(AUTH_TOKEN);
-        return Promise.resolve(true);
+        return Promise.resolve("true");
     }
 
 }
