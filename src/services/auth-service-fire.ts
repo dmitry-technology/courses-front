@@ -91,7 +91,7 @@ export default class AuthServiceFire implements AuthService {
                     console.log("error name provider");
                     break;
             }
-            socialauth.get(loginData.email)
+            socialauth.get(loginData.email);
             return signInWithPopup(this.authFire, authProvider).then(() => true).catch(() => false);
         }
     }
