@@ -1,33 +1,6 @@
 {
   "courses": [
     {
-      "id": 1344008979358,
-      "courseName": "JS",
-      "lecturerName": "Yosef",
-      "hours": 186,
-      "cost": 8352,
-      "type": "QA",
-      "dayEvening": [
-        "evening"
-      ],
-      "openDate": "2022-10-20T10:39:01.231Z",
-      "userId": 1
-    },
-    {
-      "id": 444326743403,
-      "courseName": "CSS",
-      "lecturerName": "Yosef",
-      "hours": 583,
-      "cost": 8965,
-      "type": "Programming",
-      "dayEvening": [
-        "day",
-        "evening"
-      ],
-      "openDate": "2022-06-15T14:33:19.386Z",
-      "userId": 1
-    },
-    {
       "id": 389180254186,
       "courseName": "Java Core",
       "lecturerName": "Naftaly",
