@@ -7,6 +7,8 @@ import CoursesContext from '../../store/context';
 import { StoreType } from "../../models/course-store-type";
 import { createRandomCourse } from '../../util/random-courses';
 import Course from '../../models/course';
+import { useSelector } from 'react-redux';
+import { coursesSelector } from '../../redux/store';
 
 
 
@@ -15,6 +17,7 @@ const { maxCountRandomCourses } = courseData;
 
 const Generation: FC = () => {
     const storeValue = useContext<StoreType>(CoursesContext);
+    const courses: Course[] = useSelector(coursesSelector);
     let [error, setError] = useState<string>("");
     let [valid, setValid] = useState<boolean>(true);
     let [value, setValue] = useState<number>(0);
@@ -42,7 +45,7 @@ const Generation: FC = () => {
     }
 
     async function onReset(event: any) {
-        await storeValue.courses.forEach(async (e) => await storeValue.removeFn!(e.id));
+        await courses.forEach(async (e) => await storeValue.removeFn!(e.id));
         alert("clear succeseful");
 
     }

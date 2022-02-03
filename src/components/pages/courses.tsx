@@ -12,6 +12,8 @@ import { useMediaQuery } from "react-responsive";
 import { CourseFields, getCoursesFields } from "../../config/media-query"
 import courseData from "../../config/courseData.json"
 import { ConfirmationData, emptyConfirmationData } from "../../models/common/confirmation-type";
+import {useDispatch, useSelector} from 'react-redux';
+import { userDataSelector, coursesSelector } from "../../redux/store";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   height: '100%',
@@ -30,6 +32,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 export const Courses: FC = () => {
+  const userData: UserData = useSelector(userDataSelector);
+  const courses: Course[] = useSelector(coursesSelector);
   /* context */
   const storeValue = useContext(CoursesContext);
   /* dialog confirmation */
@@ -45,9 +49,9 @@ export const Courses: FC = () => {
   /* colums */
   const [colums, setColums] = useState<GridColDef[]>([]);
   const callbackMode = useCallback(() => 
-        setColums(getFilteredColumns(getCoursesFields().get(mode) as CourseFields[])), [storeValue, mode]);
+        setColums(getFilteredColumns(getCoursesFields().get(mode) as CourseFields[])), [userData, mode]);
   /* rows */
-  const rows = useMemo(() => getRows(storeValue.courses), [storeValue, dialogVisible]);
+  const rows = useMemo(() => getRows(courses), [courses, dialogVisible]);
 
   useEffect(() => {
     callbackMode();
@@ -63,7 +67,7 @@ export const Courses: FC = () => {
     return 'isDesktop';
   }
   function getFilteredColumns(fields: CourseFields[]): any[] {
-    return getColums(storeValue.userData).filter(column => fields.includes(column.field as any));
+    return getColums(userData).filter(column => fields.includes(column.field as any));
   }
   function getColums(userData: UserData): any[] {
     return [
@@ -134,7 +138,7 @@ export const Courses: FC = () => {
     return courses.map(course => course);
   }
   function findCourseById(id: number): Course | undefined {
-    return storeValue.courses.find(e => e.id === id);
+    return courses.find(e => e.id === id);
   }
   function getInfo(course: Course): string[] {
     const res: string[] = [
@@ -164,7 +168,7 @@ export const Courses: FC = () => {
     setdialogVisible(false);
   }
   function showDetails(id: GridRowId) {
-    const course = storeValue.courses.find(e => e.id === +id);
+    const course = courses.find(e => e.id === +id);
     if (!!course) {
       textModal.current = getInfo(course);
     } else {

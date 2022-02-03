@@ -7,7 +7,7 @@ import { docData, collectionData } from "rxfire/firestore";
 import { LoginData } from "../models/common/login-data";
 import { nonAuthorizedUser, UserData } from "../models/common/user-data";
 import appFire from "../config/fire-config";
-import { collection, CollectionReference, getFirestore, doc, getDoc, DocumentData } from "firebase/firestore";
+import { collection, CollectionReference, getFirestore, doc, getDoc, DocumentData, DocumentReference, DocumentSnapshot } from "firebase/firestore";
 
 const socialauth: Map<string,AuthProvider> = new Map<string,AuthProvider>(
     [
@@ -27,49 +27,49 @@ export default class AuthServiceFire implements AuthService {
         this.collection = collection(this.db, this.collectionAdministrators);
 
     }
-    getUserData(): Observable<UserData> {
-        return authState(this.authFire).pipe(
-            mergeMap(userFire => {
-                return collectionData(this.collection).pipe(
-                    map(admins => (
-                        !!userFire ? {
-                            userName: userFire.uid,
-                            isAdmin: admins.findIndex(doc => doc.email == userFire.email) >= 0,
-                            displayName: userFire.displayName || userFire.email as string
-                        } : nonAuthorizedUser
-                    ))
-                )
-            }
-            ));
-    }
-
-    // async isAdmin(id?: string): Promise<boolean> {
-    //     if (!id) {
-    //         return false;
-    //     }
-
-    //     const docRef: DocumentReference = doc(this.collectionAuth, id);
-    //     const docSnap: DocumentSnapshot = await getDoc(docRef);
-
-    //     return docSnap.exists();
-    // }
-
     // getUserData(): Observable<UserData> {
-    //     return authState(this.authFire)
-    //         .pipe ( mergeMap(user => from(this.isAdmin(user?.uid))
-    //             .pipe(map((isAdmin) => {
-    //                 if (!!user) {
-    //                     return {
-    //                         username: user.uid,
-    //                         displayName: user.displayName ?? user.email!,
-    //                         isAdmin: isAdmin
-    //                     };
-    //                 }
-
-    //                 return nonAuthorizedUser;
-    //             }))
+    //     return authState(this.authFire).pipe(
+    //         mergeMap(userFire => {
+    //             return collectionData(this.collection).pipe(
+    //                 map(admins => (
+    //                     !!userFire ? {
+    //                         userName: userFire.uid,
+    //                         isAdmin: admins.findIndex(doc => doc.id === userFire.uid) >= 0,
+    //                         displayName: userFire.email!
+    //                     } : nonAuthorizedUser
+    //                 ))
+    //             )
+    //         }
     //         ));
     // }
+
+    async isAdmin(id?: string): Promise<boolean> {
+        if (!id) {
+            return false;
+        }
+
+        const docRef: DocumentReference = doc(this.collection, id);
+        const docSnap: DocumentSnapshot = await getDoc(docRef);
+
+        return docSnap.exists();
+    }
+
+    getUserData(): Observable<UserData> {
+        return authState(this.authFire)
+            .pipe ( mergeMap(user => from(this.isAdmin(user?.uid))
+                .pipe(map((isAdmin) => {
+                    if (!!user) {
+                        return {
+                            userName: user.uid,
+                            displayName: user.displayName ?? user.email!,
+                            isAdmin: isAdmin,
+                            social: user.providerData[0]
+                        };
+                    }
+                    return nonAuthorizedUser;
+                }))
+            ));
+    }
 
     login(loginData: LoginData): Promise<boolean> {
 

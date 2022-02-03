@@ -25,13 +25,14 @@ export const PATH_STATISTICS_HOURS = "/courses/statistics/hours";
 
 
 
+
 export const routes: RouteType[] = [
     {path:PATH_COURSES, element:<Courses/> , label: `Courses`, authenticated: true, icon: <DashboardIcon/>},
     {path:PATH_ADD_COURSE, element:<AddCourse/>, label: `Add New Course`,adminOnly: true, icon: <AddCircleOutlineIcon/> },
-    {path:PATH_LOGIN, element:<Login/>, label: `Sign In`, icon: <LoginIcon/>},
-    {path:PATH_LOGOUT, element:<Logout/>, label: `Sign Out`, authenticated: true, icon: <LogoutIcon/>},
     {path:PATH_STATISTICS_COST, element:<StatisticsCost/>, label: `Cost Statistics`, authenticated: true, icon: <MonetizationOnIcon/>},
-    {path:PATH_STATISTICS_HOURS, element:<StatisticsHours/>, label: `Hours Statistics`, authenticated: true, icon: <QueryBuilderIcon/>}
+    {path:PATH_STATISTICS_HOURS, element:<StatisticsHours/>, label: `Hours Statistics`, authenticated: true, icon: <QueryBuilderIcon/>},
+    {path:PATH_LOGIN, element:<Login/>, label: `Sign In`, icon: <LoginIcon/>},
+    {path:PATH_LOGOUT, element:<Logout/>, label: `Sign Out`, authenticated: true, icon: <LogoutIcon/>, isSocialAuth: true, social:undefined}
 ]
 
 export const developmentRoutes: RouteType[] = [

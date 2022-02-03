@@ -4,10 +4,7 @@ import { StoreType } from "../models/course-store-type";
 
 
 
-export const initialCourses: StoreType = {
-    courses: [],
-    userData: nonAuthorizedUser,
-}
+export const initialCourses: StoreType = {}
 const CoursesContext = createContext<StoreType>(initialCourses);
 
 export default CoursesContext;

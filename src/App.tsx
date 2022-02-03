@@ -1,7 +1,7 @@
 import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import NavigatorResposive from './components/common/navigator-resposive';
-import { developmentRoutes, routes } from './config/routes-config';
+import { developmentRoutes, PATH_LOGOUT, routes } from './config/routes-config';
 import CoursesContext, { initialCourses } from './store/context';
 import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
@@ -13,10 +13,19 @@ import { RouteType } from './models/common/route-type';
 import { Alert, AlertTitle, Box, LinearProgress } from '@mui/material';
 import BreadcrumbsCastom from './components/common/breadcrumbs';
 import ErrorCode from './models/common/error-code';
+import {useDispatch, useSelector} from 'react-redux';
+import { userDataSelector } from './redux/store';
+import { setCourses, setUserData } from './redux/actions';
 
 
 function getRelevantRoutes(userData: UserData): RouteType[] {
   let resRoutes = routes;
+  if(!!userData.social){
+    const index = _.findIndex(resRoutes, (e) => !!e.isSocialAuth);
+    if (index>=0) {
+       resRoutes[index].social = userData.social; 
+      }
+  }
   if (process.env.NODE_ENV === 'development') {
     resRoutes = resRoutes.concat(developmentRoutes);
   }
@@ -27,7 +36,11 @@ function getRelevantRoutes(userData: UserData): RouteType[] {
 }
 
 const App: FC = () => {
-  const [coursesState, setCoursesState] = useState<StoreType>(initialCourses);
+
+  const userData: UserData = useSelector(userDataSelector)
+  const dispatch = useDispatch();  
+
+
   const [errServer, setErrServer] = useState(false);
 
   const functionsInit = useCallback(() => {
@@ -45,7 +58,7 @@ const App: FC = () => {
     if (code === ErrorCode.NO_ERROR) {
       setErrServer(false);
     } else if (code === ErrorCode.AUTH_ERROR) {
-      if(!!coursesState.userData.userName){
+      if(!!userData.userName){
         authService.logout();
       }
       setErrServer(false)
@@ -57,8 +70,8 @@ const App: FC = () => {
   const [relevantRoutes, setRelevantRoutes] = useState<RouteType[]>(routes);
 
   useEffect(() => {
-    setRelevantRoutes(getRelevantRoutes(coursesState.userData));
-  }, [coursesState.userData])
+    setRelevantRoutes(getRelevantRoutes(userData));
+  }, [userData])
 
   useEffect(() => {
     function getUserData(): Subscription {
@@ -68,8 +81,7 @@ const App: FC = () => {
             handleError(ErrorCode.SERVER_UNAVAILABLE)
           } else {
             handleError(ErrorCode.NO_ERROR);
-            coursesState.userData = ud;
-            setCoursesState({ ...coursesState })
+            dispatch(setUserData(ud));
           }
         }
       });
@@ -86,8 +98,7 @@ const App: FC = () => {
       return college.getAllCourses().subscribe({
         next(arr: Course[]) {
           handleError(ErrorCode.NO_ERROR);
-          coursesState.courses = arr;
-          setCoursesState({ ...coursesState });
+          dispatch(setCourses(arr));
         },
         error(err: any): void {
           handleError(err);
@@ -118,7 +129,7 @@ const App: FC = () => {
         </Alert>
       </Box>
       :
-      <CoursesContext.Provider value={coursesState}>
+      <CoursesContext.Provider value={initialCourses}>
         <BrowserRouter >
           <NavigatorResposive items={relevantRoutes} />
           <Routes>{getRoutes()}

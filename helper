@@ -19,6 +19,8 @@ npm i -g json-server-auth
 npm install @mui/x-data-grid
 npm install @mui/lab
 npm install @date-io/date-fns
+npm i redux react-redux
+npm i @reduxjs/toolkit
 
 json-server -p3500 --watch data.json
 json-server-auth -p3500 --watch --routes routes.json data.json

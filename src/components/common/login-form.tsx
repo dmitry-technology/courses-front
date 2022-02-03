@@ -114,6 +114,7 @@ const LoginForm: FC<LoginFormProps> = (props) => {
               Sign In
             </Button>
           </Box>
+          <Typography m={1}>or join with</Typography>
           <Box>
               {getProviderAuthElements()}
           </Box>
