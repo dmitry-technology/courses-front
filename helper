@@ -37,7 +37,8 @@ http://localhost:3500/courses/123
 7. exceptions
 
 npm run build
-serf -n build
+npm install -g serve
+serve -s build
 
 npm i firebase rxfire
 rxfire - get push notification

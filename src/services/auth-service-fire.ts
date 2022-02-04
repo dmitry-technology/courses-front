@@ -76,23 +76,11 @@ export default class AuthServiceFire implements AuthService {
         if (!!loginData.password) {
             return signInWithEmailAndPassword(this.authFire, loginData.email, loginData.password).then(() => true).catch(() => false);
         } else {
-            let authProvider: any;
-            switch (loginData.email) {
-                case "google":
-                    authProvider = new GoogleAuthProvider();
-                    break;
-                case "twitter":
-                    authProvider = new TwitterAuthProvider();
-                    break;
-                case "facebook":
-                    authProvider = new FacebookAuthProvider();
-                    break;
-                default:
-                    console.log("error name provider");
-                    break;
+            const social: AuthProvider | undefined = socialauth.get(loginData.email);
+            if(!social){
+                Promise.resolve(false);
             }
-            socialauth.get(loginData.email);
-            return signInWithPopup(this.authFire, authProvider).then(() => true).catch(() => false);
+            return signInWithPopup(this.authFire, social!).then(() => true).catch(() => false);
         }
     }
     logout(): Promise<string> {
