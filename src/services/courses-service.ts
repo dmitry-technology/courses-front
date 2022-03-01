@@ -7,4 +7,5 @@ export default interface CoursesService {
     exists(id: number): Promise<boolean>;
     get(id?: number): Observable<Course[]> | Promise<Course>;
     update(id: number, newCourse: Course): Promise<Course>;
+    getAll?() : Promise<Course[]>;
 }

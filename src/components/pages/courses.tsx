@@ -1,6 +1,6 @@
 import { Box, Paper, styled } from "@mui/material";
 import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import CoursesContext from "../../store/context";
+// import CoursesContext from "../../store/context";
 import { Delete } from "@mui/icons-material"
 import { UserData } from "../../models/common/user-data";
 import { DataGrid, GridActionsCellItem, GridCellEditCommitParams, GridColDef, GridRowId, GridRowParams, GridRowsProp, GridValueFormatterParams } from "@mui/x-data-grid";
@@ -12,8 +12,9 @@ import { useMediaQuery } from "react-responsive";
 import { CourseFields, getCoursesFields } from "../../config/media-query"
 import courseData from "../../config/courseData.json"
 import { ConfirmationData, emptyConfirmationData } from "../../models/common/confirmation-type";
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userDataSelector, coursesSelector } from "../../redux/store";
+import { addCourseAction, getAllCoursesAction, removeCourseAction, updateCourseAction } from "../../redux/actions";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   height: '100%',
@@ -32,10 +33,14 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 export const Courses: FC = () => {
+  
   const userData: UserData = useSelector(userDataSelector);
   const courses: Course[] = useSelector(coursesSelector);
+  
   /* context */
-  const storeValue = useContext(CoursesContext);
+  // const storeValue = useContext(CoursesContext);
+  const dispatch = useDispatch();
+  
   /* dialog confirmation */
   const confirmationData = useRef<ConfirmationData>(emptyConfirmationData);
   const [dialogVisible, setdialogVisible] = useState(false);
@@ -48,8 +53,8 @@ export const Courses: FC = () => {
   const mode = useMemo(() => getMode(), [isMobile, isLaptop]);
   /* colums */
   const [colums, setColums] = useState<GridColDef[]>([]);
-  const callbackMode = useCallback(() => 
-        setColums(getFilteredColumns(getCoursesFields().get(mode) as CourseFields[])), [userData, mode]);
+  const callbackMode = useCallback(() =>
+    setColums(getFilteredColumns(getCoursesFields().get(mode) as CourseFields[])), [userData, mode, courses]);
   /* rows */
   const rows = useMemo(() => getRows(courses), [courses, dialogVisible]);
 
@@ -142,28 +147,28 @@ export const Courses: FC = () => {
   }
   function getInfo(course: Course): string[] {
     const res: string[] = [
-        `Course ID  : ${course.id}`,
-        `Course Name: ${course.courseName}`,
-        `Lecturer   : ${course.lecturerName}`,
-        `Hours      : ${course.hours}`,
-        `Cost : ${course.cost}`,
-        `Openning Date : ${course.openDate.toLocaleDateString()}`,
-        `Course Type : ${course.type}`,
-        `Timing  : ${course.dayEvening.join(';')}`
+      `Course ID  : ${course.id}`,
+      `Course Name: ${course.courseName}`,
+      `Lecturer   : ${course.lecturerName}`,
+      `Hours      : ${course.hours}`,
+      `Cost : ${course.cost}`,
+      `Openning Date : ${course.openDate.toLocaleDateString()}`,
+      `Course Type : ${course.type}`,
+      `Timing  : ${course.dayEvening.join(';')}`
     ];
     return res;
-}
-  
+  }
+
   /* Handle */
   function handleRemove(id: number, status: boolean): void {
     if (status) {
-      storeValue.removeFn!(id);
+      dispatch(removeCourseAction(id));
     }
     setdialogVisible(false);
   }
   function handleUpdate(course: Course, status: boolean): void {
     if (status) {
-      storeValue.updateFn!(course.id, course);
+      dispatch(updateCourseAction((course as any).id, course));
     }
     setdialogVisible(false);
   }

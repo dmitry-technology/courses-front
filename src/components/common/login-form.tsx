@@ -6,11 +6,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getProviderAuth } from '../../config/provider-auth';
+import { providerAuth, AuthType } from '../../config/provider-auth';
 
 type LoginFormProps = {
   loginFn: (loginData: LoginData) => Promise<boolean>;
   passwordValidationFn: (password: string) => string;
+  authNetwork?: AuthType[];
 }
 const emptyLoginData: LoginData = { email: "", password: "" }
 
@@ -18,7 +19,7 @@ const LoginForm: FC<LoginFormProps> = (props) => {
   const theme = createTheme();
 
 
-  const { loginFn, passwordValidationFn } = props;
+  const { loginFn, passwordValidationFn, authNetwork } = props;
   const [loginData, setLoginData] = useState<LoginData>(emptyLoginData);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [flValid, setflValid] = useState<boolean>(false);
@@ -58,7 +59,7 @@ const LoginForm: FC<LoginFormProps> = (props) => {
   }
 
   function getProviderAuthElements():ReactNode[] {
-    return getProviderAuth.map((element, index) => <IconButton key={index} value={element.name} onClick={()=>onSubmProvider(element.name)}>{element.icon}</IconButton>);
+    return authNetwork!.map((element, index) => <IconButton key={index} value={element.name} onClick={()=>onSubmProvider(element.name)}>{element.icon}</IconButton>);
   }
 
 

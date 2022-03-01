@@ -1,5 +1,3 @@
-
-
 export enum CourseFields {
     id = "id",
     courseName = "courseName",
@@ -19,4 +17,3 @@ export function getCoursesFields(): Map<string, CourseFields[]> {
         ["isDesktop", [CourseFields.courseName, CourseFields.lecturerName, CourseFields.hours, CourseFields.cost, CourseFields.openDate, CourseFields.actions]], 
     ]);
 }
-

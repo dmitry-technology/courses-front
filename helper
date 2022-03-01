@@ -21,7 +21,10 @@ npm install @mui/lab
 npm install @date-io/date-fns
 npm i redux react-redux
 npm i @reduxjs/toolkit
-
+npm i redux-thunk
+npm i sockjs stomp
+npm i @stomp/stompjs
+$ npm i @types/sockjs-client
 json-server -p3500 --watch data.json
 json-server-auth -p3500 --watch --routes routes.json data.json
 json-server-auth -p3500 --routes routes.json data.json

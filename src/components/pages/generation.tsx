@@ -9,6 +9,7 @@ import { createRandomCourse } from '../../util/random-courses';
 import Course from '../../models/course';
 import { useSelector } from 'react-redux';
 import { coursesSelector } from '../../redux/store';
+import { college } from '../../config/servicesConfig';
 
 
 
@@ -16,7 +17,7 @@ const { maxCountRandomCourses } = courseData;
 
 
 const Generation: FC = () => {
-    const storeValue = useContext<StoreType>(CoursesContext);
+    // const storeValue = useContext<StoreType>(CoursesContext);
     const courses: Course[] = useSelector(coursesSelector);
     let [error, setError] = useState<string>("");
     let [valid, setValid] = useState<boolean>(true);
@@ -32,7 +33,7 @@ const Generation: FC = () => {
     async function onSubmit(event: any) {
         event.preventDefault();
         for (let index = 0; index < value; index++) {
-            let course = await storeValue.addFn!(createRandomCourse());
+            let course = await college.addCourse(createRandomCourse());
 
         }
     }
@@ -45,7 +46,7 @@ const Generation: FC = () => {
     }
 
     async function onReset(event: any) {
-        await courses.forEach(async (e) => await storeValue.removeFn!(e.id));
+        await courses.forEach(async (e) => await college.removeCourse((e as any).id));
         alert("clear succeseful");
 
     }

@@ -25,5 +25,8 @@ export default class College {
         return (this.coursesSerivece.get() as Observable<Course[]>)
         .pipe(map(courses => courses.map(course => ({...course, openDate: new Date(course.openDate)}))));
     }
+    getAll(): Promise<Course[]> {
+        return this.coursesSerivece.getAll!() as Promise<Course[]>;
+    }
 
 }

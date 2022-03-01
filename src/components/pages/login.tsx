@@ -6,6 +6,7 @@ import LoginForm from "../common/login-form";
 import courseData from "../../config/courseData.json"
 import { Navigate } from "react-router-dom";
 import { PATH_COURSES } from "../../config/routes-config";
+import {providerAuth} from "../../config/provider-auth"
 
 export const Login: FC = () => {
   const [flNavigae, setflNavigate] = useState<boolean>(false);
@@ -20,7 +21,7 @@ export const Login: FC = () => {
     <LoginForm loginFn={loginFn} passwordValidationFn={function (password: string): string {
         return password.length < courseData.passwordLength ? 
         `length of password can't be less than ${courseData.passwordLength}` : "";
-      } }>
+      } } authNetwork={providerAuth}>
     </LoginForm>
     {flNavigae && <Navigate to={PATH_COURSES}/>}
     </Fragment>
