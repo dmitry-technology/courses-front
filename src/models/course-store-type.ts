@@ -1,5 +1,5 @@
 import { UserData } from "./common/user-data";
-import Course from "./course";
+import Course from "./Course";
 
 export type StoreType = {
     

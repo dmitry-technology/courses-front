@@ -5,7 +5,7 @@ import Statistics from "../common/statistics";
 import courseData from '../../config/courseData.json'
 import { useSelector } from "react-redux";
 import { coursesSelector } from "../../redux/store";
-import Course from "../../models/course";
+import Course from "../../models/Course";
 
 
 

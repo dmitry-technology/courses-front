@@ -6,7 +6,7 @@ import courseData from '../../config/courseData.json'
 import CoursesContext from '../../store/context';
 import { StoreType } from "../../models/course-store-type";
 import { createRandomCourse } from '../../util/random-courses';
-import Course from '../../models/course';
+import Course from '../../models/Course';
 import { useSelector } from 'react-redux';
 import { coursesSelector } from '../../redux/store';
 import { college } from '../../config/servicesConfig';

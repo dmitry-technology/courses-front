@@ -6,7 +6,7 @@ import CoursesContext from "../store/context";
 import { emptyCourse } from '../util/random-courses';
 import { StoreType } from "../models/course-store-type";
 import _ from "lodash";
-import Course from "../models/course";
+import Course from "../models/Course";
 
 
 const FormGetObject: FC<{ config: any, addCourseFn: (course:Course)=>void }> = (props) => {

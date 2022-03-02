@@ -1,4 +1,4 @@
-import Course from "../models/course";
+import Course from "../models/Course";
 import { PayloadAction } from '@reduxjs/toolkit'
 import { UserData } from "../models/common/user-data";
 import ErrorCode from "../models/common/error-code";

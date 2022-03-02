@@ -1,4 +1,4 @@
-import  Course  from "../models/course";
+import  Course  from "../models/Course";
 import {Observable} from 'rxjs'
 
 export default interface CoursesService {

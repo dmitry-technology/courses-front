@@ -1,7 +1,7 @@
 import CoursesService from "./courses-service";
 import {Observable} from 'rxjs'
 import { map } from "rxjs/operators";
-import Course from "../models/course";
+import Course from "../models/Course";
 
 
 export default class College {

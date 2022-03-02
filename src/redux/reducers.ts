@@ -1,7 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import ErrorCode from "../models/common/error-code";
 import { nonAuthorizedUser, UserData } from "../models/common/user-data";
-import Course from "../models/course";
+import Course from "../models/Course";
 import { SET_COURSES, SET_ERROR_CODE, SET_USER_DATA } from "./actions";
 
 export const coursesReducer = (courses: Course[] = [], action: PayloadAction<Course[]>): Course[] => {

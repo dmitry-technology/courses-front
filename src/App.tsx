@@ -6,7 +6,7 @@ import CoursesContext, { initialCourses } from './store/context';
 import { StoreType } from './models/course-store-type';
 import _ from 'lodash';
 import { authService, college } from './config/servicesConfig'
-import Course from './models/course';
+import Course from './models/Course';
 import { Subscription } from 'rxjs'
 import { UserData, DISPLAY_NAME_ERROR } from './models/common/user-data';
 import { RouteType } from './models/common/route-type';

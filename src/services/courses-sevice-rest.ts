@@ -1,4 +1,4 @@
-import Course from "../models/course";
+import Course from "../models/Course";
 import CoursesService from "./courses-service";
 import { Observable, from } from 'rxjs'
 import ErrorCode from "../models/common/error-code"

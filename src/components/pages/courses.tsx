@@ -4,7 +4,7 @@ import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } fro
 import { Delete } from "@mui/icons-material"
 import { UserData } from "../../models/common/user-data";
 import { DataGrid, GridActionsCellItem, GridCellEditCommitParams, GridColDef, GridRowId, GridRowParams, GridRowsProp, GridValueFormatterParams } from "@mui/x-data-grid";
-import Course from "../../models/course";
+import Course from "../../models/Course";
 import DialogConfirm from "../common/dialog";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ModalInfo from "../common/modal-info";

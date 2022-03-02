@@ -3,7 +3,7 @@ import appFire from "../config/fire-config";
 import { collection, getFirestore, doc, getDoc, setDoc, deleteDoc, CollectionReference } from 'firebase/firestore';
 import { Observable, throwError } from "rxjs";
 import { collectionData } from 'rxfire/firestore'
-import Course from '../models/course'
+import Course from '../models/Course'
 import { getRandomInteger } from "../util/common/random";
 import { catchError } from "rxjs/operators";
 import ErrorCode from "../models/common/error-code";
