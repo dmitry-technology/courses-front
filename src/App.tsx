@@ -53,7 +53,7 @@ const App: FC = () => {
       }
       setErrServer(false)
     } else {
-      setErrServer(true);
+      setErrServer(!!userData.userName ? true : false);
     }
   }
 

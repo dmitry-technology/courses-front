@@ -1,9 +1,9 @@
 import { LoginData } from "../models/common/login-data";
 import { nonAuthorizedUser, UserData, unavailableServiceUser } from "../models/common/user-data";
 import { Observable } from "rxjs"
-import { AUTH_TOKEN } from "./courses-sevice-rest";
 import { Buffer } from "buffer";
 import AuthService from "./auth-service";
+import { AUTH_TOKEN } from "../config/servicesConfig";
 const pollingInterval = 2000;
 
 export default class AuthServiceJWT implements AuthService {

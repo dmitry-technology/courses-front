@@ -4,7 +4,8 @@ import { Observable, Observer } from 'rxjs'
 import ErrorCode from "../models/common/error-code"
 import { CompatClient, Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-export const AUTH_TOKEN = "auth_token";
+import { AUTH_TOKEN } from "../config/servicesConfig";
+
 
 async function getResponse(url: string, init?: RequestInit): Promise<Response> {
     let flInnerCatch = false;
@@ -31,10 +32,17 @@ async function requestRest(url: string, init?: RequestInit): Promise<any> {
     return await response.json();
 }
 
-function getHeaders(): { Authorization?: string, "Content-Type": string } {
-    return {
-        "Content-Type": "application/json"
-    }
+function getHeaders(): { authorization?: string, "Content-Type": string } {
+    const token = localStorage.getItem(AUTH_TOKEN);
+    if (!!token) {
+        return {
+            authorization: token,
+            "Content-Type": "application/json"
+        }
+    } else
+        return {
+            "Content-Type": "application/json"
+        }
 }
 
 export default class CoursesServiceRestJava implements CoursesService {
@@ -75,8 +83,11 @@ export default class CoursesServiceRestJava implements CoursesService {
 
     private getObservable(): Observable<Course[]> {
         return new Observable<Course[]>(observer => {
-            this.fetchData(observer);
-            this.connect(observer);
+            const token = localStorage.getItem(AUTH_TOKEN);
+            if(!!token){
+                this.fetchData(observer);
+                this.connect(observer);
+            }
             return () => { this.disconnect() };
         })
     }
@@ -102,7 +113,7 @@ export default class CoursesServiceRestJava implements CoursesService {
                 this.stompClient!.subscribe("/topic/courses", message => {
                     const payLoad: any = JSON.parse(message.body);
                     const cmd: String = payLoad.command;
-                    const id: number = parseInt(payLoad.id);                    
+                    const id: number = parseInt(payLoad.id);
                     switch (cmd) {
                         case "added":
                             (this.get(id) as Promise<Course>).then((course) => {
@@ -132,7 +143,7 @@ export default class CoursesServiceRestJava implements CoursesService {
         );
     }
 
-    private removeCourseFromCash(id: number){
+    private removeCourseFromCash(id: number) {
         let index = this.courses.findIndex(c => c.id == id);
         this.courses.splice(index, 1);
     }

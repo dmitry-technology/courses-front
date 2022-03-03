@@ -6,6 +6,7 @@ import AuthServiceFake from "../services/auth-service-fake";
 import courseData from './courseData.json'
 import AuthServiceFire from "../services/auth-service-fire";
 import CoursesServiceRestJava from "../services/courses-sevice-rest-java";
+import AuthServiceRestJava from "../services/auth-service-rest-java";
 
 
 /**rest */
@@ -18,12 +19,17 @@ import CoursesServiceRestJava from "../services/courses-sevice-rest-java";
 // export const courseProvider = new CoursesServiceFire("Courses", courseData.minId, courseData.maxId);
 
 /**fake auth */
-export const authService = new AuthServiceFake();
+// export const authService = new AuthServiceFake();
 
 /**java server rest */
 const URL = "http://localhost:8080";
 export const courseProvider = new CoursesServiceRestJava(`${URL}/courses`, URL);
+export const authService = new AuthServiceRestJava(URL);
 
+/**const for local storage */
+export const AUTH_TOKEN = "auth_token";
+export const AUTH_ROLE = "auth_role";
+export const AUTH_USER = "auth_user";
 
 
 

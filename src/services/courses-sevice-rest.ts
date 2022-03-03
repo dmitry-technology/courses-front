@@ -2,8 +2,8 @@ import Course from "../models/Course";
 import CoursesService from "./courses-service";
 import { Observable, from } from 'rxjs'
 import ErrorCode from "../models/common/error-code"
+import { AUTH_TOKEN } from "../config/servicesConfig";
 const pollingInterval: number = 2000;
-export const AUTH_TOKEN = "auth_token";
 
 async function getResponse(url: string, init?: RequestInit): Promise<Response> {
     let flInnerCatch = false;
