@@ -91,6 +91,7 @@ const App: FC = () => {
           dispatch(setCourses(arr));
         },
         error(err: any): void {
+          
           dispatch(setErrorCode(err));
           setTimeout(() => {
             subscription = getData();

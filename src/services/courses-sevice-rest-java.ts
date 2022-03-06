@@ -7,108 +7,93 @@ import SockJS from "sockjs-client";
 import { AUTH_TOKEN } from "../config/servicesConfig";
 
 
-async function getResponse(url: string, init?: RequestInit): Promise<Response> {
+async function  getResponse(url: string, init?: RequestInit  ): Promise<Response>  {
     let flInnerCatch = false;
-    try {
-        const response = await fetch(url, init);
-        if (response.status < 400 || response.status == 404) {
-            return response;
-        }
-        const err = response.status == 401 || response.status == 403 ?
-            ErrorCode.AUTH_ERROR : ErrorCode.SERVER_UNAVAILABLE;
-        flInnerCatch = true;
-        throw err;
-    } catch (err) {
-        if (flInnerCatch) {
-            throw err;
-        } else {
-            throw ErrorCode.SERVER_UNAVAILABLE;
-        }
-    }
+     try {
+         const response = await fetch(url, init);
+         if (response.status < 400 || response.status == 404) {
+             return response ;
+         }
+         const err = response.status == 401 || response.status == 403 ?
+         ErrorCode.AUTH_ERROR : ErrorCode.SERVER_UNAVAILABLE;
+         flInnerCatch = true
+         throw err;
+     } catch (err) {
+         if (flInnerCatch) {
+             throw err;
+         } else {
+             throw ErrorCode.SERVER_UNAVAILABLE;
+         }
+     }
 }
-
 async function requestRest(url: string, init?: RequestInit): Promise<any> {
-    const response = await getResponse(url, init);
+    const response: Response = await getResponse(url, init) ;
     return await response.json();
 }
 
-function getHeaders(): { authorization?: string, "Content-Type": string } {
-    const token = localStorage.getItem(AUTH_TOKEN);
-    if (!!token) {
-        return {
-            authorization: token,
-            "Content-Type": "application/json"
-        }
-    } else
-        return {
-            "Content-Type": "application/json"
-        }
+function getHeaders(): { Authorization?: string, "Content-Type": string } {
+    return { "Content-Type": "application/json",
+     Authorization: localStorage.getItem(AUTH_TOKEN) as string};
 }
-
 export default class CoursesServiceRestJava implements CoursesService {
-    stompClient: CompatClient | undefined;
     private courses: Course[] = [];
+    stompClient: CompatClient | undefined;
     constructor(private url: string, private wsUrl: string) { }
-    add(course: Course): Promise<Course> {
+     add(course: Course): Promise<Course> {
+        (course as any).userId = 1;
         return requestRest(this.url, {
-            method: "POST",
+            method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify(course)
         })
+       
     }
-
-    async getAll(): Promise<Course[]> {
-        return this.fetchGet(this.url) as Promise<Course[]>;
-    }
-
     async remove(id: number): Promise<Course> {
         const oldCourse = await this.get(id);
-        await requestRest(this.getUrlId(id), {
+        await requestRest(this.getUrlId(id),{
             method: "DELETE",
             headers: getHeaders()
-        })
+        });
         return oldCourse as Course;
     }
-
+    private getUrlId(id: number) {
+        return `${this.url}/${id}`;
+    }
     async exists(id: number): Promise<boolean> {
-        const response = await getResponse(this.getUrlId(id), {
+        const response = await getResponse(this.getUrlId(id),{
             headers: getHeaders(),
-        });
+        } );
         return response.ok;
     }
-
     get(id?: number): Observable<Course[]> | Promise<Course> {
-        return id == undefined ? this.getObservable() : this.fetchGet(`${this.url}/${id}`) as Promise<Course>;
-    }
+        if (id) {
+            return fetchGet(this.getUrlId(id));
+        } else {
+            return new Observable<Course[]>(observer => {
+                 this.fetchData(observer);
+                 this.connect(observer);
+                return () => {this.disconnect()};
+            });
+        }
 
-    private getObservable(): Observable<Course[]> {
-        return new Observable<Course[]>(observer => {
-            const token = localStorage.getItem(AUTH_TOKEN);
-            if(!!token){
-                this.fetchData(observer);
-                this.connect(observer);
-            }
-            return () => { this.disconnect() };
-        })
     }
-
-    private async fetchGet(url: string): Promise<any> {
-        return requestRest(url, {
-            headers: getHeaders()
+    async update(id: number, newCourse: Course): Promise<Course> {
+        const oldCourse = await this.get(id);
+        await fetch(this.getUrlId(id), {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify(newCourse)
         });
+        return oldCourse as Course;
     }
-
     private fetchData(observer: Observer<Course[]>) {
-        this.fetchGet(this.url).then(data => {
-            this.courses = data;
-            observer.next(data);
-        }).catch(err => observer.error(err));
+        fetchGet(this.url).then(data => {this.courses=data; observer.next(data);}).
+        catch(err => observer.error(err))
     }
-
     private connect(observer: Observer<Course[]>) {
         const webSocket = new SockJS(`${this.wsUrl}/websocket-courses`);
         this.stompClient = Stomp.over(webSocket);
-        this.stompClient.connect({},
+        this.stompClient.connect({}, 
             (frame: any) => {
                 this.stompClient!.subscribe("/topic/courses", message => {
                     const payLoad: any = JSON.parse(message.body);
@@ -137,33 +122,21 @@ export default class CoursesServiceRestJava implements CoursesService {
                             break;
                     }
                 });
-            },
-            (error: any) => observer.error(error),
-            () => observer.error("disconnected")
-        );
+            }, (error:any) => observer.error(error), () => observer.error("disconnected"))
     }
-
+    private disconnect() {
+        this.stompClient?.disconnect()
+    }
     private removeCourseFromCash(id: number) {
         let index = this.courses.findIndex(c => c.id == id);
         this.courses.splice(index, 1);
     }
+}
 
-    private disconnect() {
-        this.stompClient?.disconnect()
-    }
 
-    private getUrlId(id: number) {
-        return `${this.url}/${id}`;
-    }
-
-    async update(id: number, newCourse: Course): Promise<Course> {
-        const oldCourse = await this.get(id);
-        await fetch(this.getUrlId(id), {
-            method: "PUT",
-            headers: getHeaders(),
-            body: JSON.stringify(newCourse)
-        });
-        return oldCourse as Course;
-    }
-
+ function fetchGet(url: string): Promise<any> {
+        return  requestRest(url, {
+            headers: {Authorization: localStorage.getItem(AUTH_TOKEN) as string}
+        }); 
+    
 }

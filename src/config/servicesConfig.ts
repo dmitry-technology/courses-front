@@ -28,8 +28,7 @@ export const authService = new AuthServiceRestJava(URL);
 
 /**const for local storage */
 export const AUTH_TOKEN = "auth_token";
-export const AUTH_ROLE = "auth_role";
-export const AUTH_USER = "auth_user";
+export const USER_DATA = "user_data";
 
 
 
