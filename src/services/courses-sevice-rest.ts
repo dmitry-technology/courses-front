@@ -32,7 +32,7 @@ async function requestRest(url: string, init?: RequestInit): Promise<any> {
 
 function getHeaders(): { Authorization: string, "Content-Type": string } {
     return {
-        Authorization: "Bearer " + localStorage.getItem(AUTH_TOKEN),
+        Authorization: localStorage.getItem(AUTH_TOKEN)  as string,
         "Content-Type": "application/json"
     }
 }

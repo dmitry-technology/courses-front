@@ -25,6 +25,8 @@ import AuthServiceRestJava from "../services/auth-service-rest-java";
 const URL = "http://localhost:8080";
 export const courseProvider = new CoursesServiceRestJava(`${URL}/courses`, URL);
 export const authService = new AuthServiceRestJava(URL);
+// export const authService = new AuthServiceJWT(URL);
+
 
 /**const for local storage */
 export const AUTH_TOKEN = "auth_token";
