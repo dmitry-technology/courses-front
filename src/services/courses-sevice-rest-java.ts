@@ -93,12 +93,16 @@ export default class CoursesServiceRestJava implements CoursesService {
     private connect(observer: Observer<Course[]>) {
         const webSocket = new SockJS(`${this.wsUrl}/websocket-courses`);
         this.stompClient = Stomp.over(webSocket);
+        console.log("connect webSocket");
+        
         this.stompClient.connect({}, 
             (frame: any) => {
                 this.stompClient!.subscribe("/topic/courses", message => {
                     const payLoad: any = JSON.parse(message.body);
                     const cmd: String = payLoad.command;
                     const id: number = parseInt(payLoad.id);
+                    console.log(cmd);
+                    
                     switch (cmd) {
                         case "added":
                             (this.get(id) as Promise<Course>).then((course) => {

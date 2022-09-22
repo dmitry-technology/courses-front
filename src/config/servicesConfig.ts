@@ -16,15 +16,15 @@ import AuthServiceRestJava from "../services/auth-service-rest-java";
 
 /**firebase */
 // export const authService = new AuthServiceFire("administrators");
-// export const courseProvider = new CoursesServiceFire("Courses", courseData.minId, courseData.maxId);
+export const courseProvider = new CoursesServiceFire("Courses", courseData.minId, courseData.maxId);
 
 /**fake auth */
-// export const authService = new AuthServiceFake();
+export const authService = new AuthServiceFake();
 
 /**java server rest */
-const URL = "http://localhost:8080";
-export const courseProvider = new CoursesServiceRestJava(`${URL}/courses`, URL);
-export const authService = new AuthServiceRestJava(URL);
+// const URL = "http://localhost:8080";
+// export const courseProvider = new CoursesServiceRestJava(`${URL}/courses`, URL);
+// export const authService = new AuthServiceRestJava(URL);
 // export const authService = new AuthServiceJWT(URL);
 
 
